@@ -56,8 +56,9 @@ namespace utils
 	/**
 	Returns a string formed by all the elements in 'parts' with the string 'delimiter' in between them
 	More or less the opposite of utils::split
+	You may optionally choose to concatenate only a part of the vector by choosing the begginning index as the third argument
 	*/
-	std::string join(const std::vector<std::string> & parts, const std::string & delimiter);
+	std::string join(const std::vector<std::string> & parts, const std::string & delimiter, size_t begginning_index = 0);
 
 	/**
 	Returns an uppercase version of the string 'input'

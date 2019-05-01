@@ -106,10 +106,10 @@ std::vector<std::string> utils::split(std::string input, const char delimiter, s
 	return result;
 }
 
-std::string utils::join(const std::vector<std::string>& parts, const std::string & delimiter)
+std::string utils::join(const std::vector<std::string>& parts, const std::string & delimiter, size_t begginning_index)
 {
 	std::string result = "";
-	for (size_t i = 0; i < parts.size() - 1; i++)
+	for (size_t i = begginning_index; i < parts.size() - 1; i++)
 	{
 		result += parts[i];
 		result += delimiter;
