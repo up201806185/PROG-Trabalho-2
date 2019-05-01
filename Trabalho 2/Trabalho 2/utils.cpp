@@ -140,6 +140,11 @@ std::string utils::lowercase(std::string input)
 	return input;
 }
 
+void utils::clear_screen()
+{
+	system("cls");
+}
+
 
 /**
 Returns the number of ocurrences of char 'delim' in the string 'input'

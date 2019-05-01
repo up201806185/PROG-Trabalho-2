@@ -19,7 +19,7 @@ namespace utils
 	Assigns the first integer it finds in 'stream' to 'input'
 	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
 	an EOF happened while consuming the 'stream'
-	Note: the entire line is consumed, therefore it will read the first integer from the line and discard the rest
+	Note: the entire line is consumed, therefore it will read the first integer from the line and discard the rest of the line
 	Helpful tip: use this function from <limits> to get the maximum possible integer
 	std::numeric_limits<your_datatype>::max();
 	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
@@ -59,18 +59,22 @@ namespace utils
 	*/
 	std::string join(const std::vector<std::string> & parts, const std::string & delimiter);
 
-	/*
+	/**
 	Returns an uppercase version of the string 'input'
 	Example: utils::uppercase("mieic") returns "MIEIC"
 	*/
 	std::string uppercase(std::string input);
 
-	/*
+	/**
 	Returns an lowercase version of the string 'input'
 	Example: utils::lowercase("MIEIC") returns "mieic"
 	*/
 	std::string lowercase(std::string input);
 	
+	/**
+	Clears the console screen
+	*/
+	void clear_screen();
 }
 
 #endif
