@@ -15,6 +15,27 @@ namespace utils
 	*/
 	bool read_str(std::istream & stream, std::string & input, bool read_only_one_string = false);
 
+	/*
+	Assigns the first integer it finds in 'stream' to 'input'
+	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
+	an EOF happened while consuming the 'stream'
+	Helpful tip: use this function from <limits> to get the maximum possible integer
+	std::numeric_limits<your_datatype>::max();
+	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
+	*/
+	template<class T>
+	bool read_num(std::istream & stream, T & input);
+	
+	/*
+	Assigns the first integer it finds in 'str' to 'input'
+	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
+	an EOF happened while reading the 'str'
+	Helpful tip: use this function from <limits> to get the maximum possible integer
+	std::numeric_limits<your_datatype>::max();
+	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
+	*/
+	template<class T>
+	bool read_num(const std::string & str, T & input);
 
 	/**
 	Trims all whitespace at the beggining and end of the string 'input'
@@ -48,6 +69,7 @@ namespace utils
 	Example: utils::lowercase("MIEIC") returns "mieic"
 	*/
 	std::string lowercase(std::string input);
+	
 }
 
 #endif

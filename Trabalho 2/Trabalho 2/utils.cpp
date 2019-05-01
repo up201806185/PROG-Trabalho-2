@@ -4,6 +4,9 @@
 #include <string>
 #include <sstream>
 #include <ctype.h>
+#include <limits>
+
+size_t char_count(const std::string & input, const char delim);
 
 bool utils::read_str(std::istream & stream, std::string & input, bool read_only_one_string)
 {
@@ -38,6 +41,38 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 	}
 }
 
+template <class T>
+bool utils::read_num(std::istream & stream, T & input)
+{
+	stream >> input;
+
+	if (stream.fail())
+	{
+		if (stream.eof())
+		{
+			input = std::numeric_limits<T>::max();
+			stream.clear();
+		}
+		else
+		{
+			stream.clear();
+			stream.ignore(100000, '\n');
+		}
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+template <class T>
+bool utils::read_num(const std::string & str, T & input)
+{
+	std::istringstream temp(str);
+	return utils::readnum(temp, input);
+}
+
 
 void utils::trim(std::string & input)
 {
@@ -49,8 +84,6 @@ void utils::trim(std::string & input)
 
 	return;
 }
-
-
 
 std::vector<std::string> utils::split(std::string input, const char delimiter, size_t max_splits)
 {
