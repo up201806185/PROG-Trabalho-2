@@ -19,6 +19,7 @@ namespace utils
 	Assigns the first integer it finds in 'stream' to 'input'
 	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
 	an EOF happened while consuming the 'stream'
+	Note: the entire line is consumed, therefore it will read the first integer from the line and discard the rest
 	Helpful tip: use this function from <limits> to get the maximum possible integer
 	std::numeric_limits<your_datatype>::max();
 	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful

@@ -44,33 +44,29 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 template <class T>
 bool utils::read_num(std::istream & stream, T & input)
 {
-	stream >> input;
+	input = 0;
 
-	if (stream.fail())
+	std::string temp_string;
+	if (!read_str(stream, temp_string))
 	{
 		if (stream.eof())
 		{
 			input = std::numeric_limits<T>::max();
-			stream.clear();
-		}
-		else
-		{
-			stream.clear();
-			stream.ignore(100000, '\n');
 		}
 		return false;
 	}
-	else
-	{
-		return true;
-	}
+
+	return utils::read_num(temp_string, input);
 }
 
 template <class T>
 bool utils::read_num(const std::string & str, T & input)
 {
-	std::istringstream temp(str);
-	return utils::readnum(temp, input);
+	std::istringstream temp_stream(str);
+
+	temp_stream >> input;
+	
+	return (!temp_stream.fail());
 }
 
 
