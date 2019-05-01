@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctype.h>
 
 bool utils::read_str(std::istream & stream, std::string & input, bool read_only_one_string)
 {
@@ -88,6 +89,26 @@ std::string utils::join(const std::vector<std::string>& parts, const std::string
 	result += parts[parts.size() - 1];
 
 	return result;
+}
+
+std::string utils::uppercase(std::string input)
+{
+	for (char & i : input)
+	{
+		i = toupper(i);
+	}
+
+	return input;
+}
+
+std::string utils::lowercase(std::string input)
+{
+	for (char & i : input)
+	{
+		i = tolower(i);
+	}
+
+	return input;
 }
 
 

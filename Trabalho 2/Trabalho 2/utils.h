@@ -36,6 +36,18 @@ namespace utils
 	More or less the opposite of utils::split
 	*/
 	std::string join(const std::vector<std::string> & parts, const std::string & delimiter);
+
+	/*
+	Returns an uppercase version of the string 'input'
+	Example: utils::uppercase("mieic") returns "MIEIC"
+	*/
+	std::string uppercase(std::string input);
+
+	/*
+	Returns an lowercase version of the string 'input'
+	Example: utils::lowercase("MIEIC") returns "mieic"
+	*/
+	std::string lowercase(std::string input);
 }
 
 #endif
