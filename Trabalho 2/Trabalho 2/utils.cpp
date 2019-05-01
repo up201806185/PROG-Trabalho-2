@@ -37,6 +37,7 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 	}
 }
 
+
 void utils::trim(std::string & input)
 {
 	const std::string WHITE_SPACE = " \t\n\v\f\r";//C locale white space
@@ -47,6 +48,8 @@ void utils::trim(std::string & input)
 
 	return;
 }
+
+
 
 std::vector<std::string> utils::split(std::string input, const char delimiter, size_t max_splits)
 {
