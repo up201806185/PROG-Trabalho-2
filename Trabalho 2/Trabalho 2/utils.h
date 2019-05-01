@@ -30,6 +30,12 @@ namespace utils
 	Example: utils::split("a, ,b, c", ',', 1) will return {"a", ",b, c"}
 	*/
 	std::vector<std::string> split(std::string input, const char delimiter, size_t max_splits = -1); // -1 will make it loop back to its maximum value
+
+	/**
+	Returns a string formed by all the elements in 'parts' with the string 'delimiter' in between them
+	More or less the opposite of utils::split
+	*/
+	std::string join(const std::vector<std::string> & parts, const std::string & delimiter);
 }
 
 #endif
