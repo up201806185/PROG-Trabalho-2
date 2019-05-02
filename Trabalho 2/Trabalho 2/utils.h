@@ -87,7 +87,7 @@ bool utils::read_num(std::istream & stream, T & input)
 	std::string temp_string;
 	if (!read_str(stream, temp_string))
 	{
-		if (stream.eof())
+		if (temp_string == "EOF" )
 		{
 			input = std::numeric_limits<T>::max();
 		}
