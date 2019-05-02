@@ -3,5 +3,5 @@
 
 int main()
 {
-	utils::print("Hello there", std::cout);
+	utils::print("Hello there");
 }
