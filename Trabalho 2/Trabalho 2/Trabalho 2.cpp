@@ -1,6 +1,7 @@
 #include <iostream>
+#include "utils.h"
 
 int main()
 {
-    std::cout << "Hello Rafael!\n"; 
+	utils::print("Hello there", std::cout);
 }
