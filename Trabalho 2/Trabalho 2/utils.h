@@ -42,14 +42,16 @@ namespace utils
 	bool read_num(const std::string & str, T & input);
 
 	/**
-	Prints the variable to 'stream' followed by 'endl' which default is a newline character
-	There is an optional third argument which you can use to change 'endl' to whatever you wish
+	Prints the entity to 'stream' (std::cout by default) followed by 'endl' ("\n") by default
+	There is an optional second argument you can use to specify the output stream
+	There is an optional third argument you can use to change 'endl' to whatever you wish
 	*/
 	void print(const bool input, std::ostream & stream = std::cout, std::string endl = "\n");
 
 	/**
-	Prints the variable to 'stream' followed by 'endl' which default is a newline character
-	There is an optional third argument which you can use to change 'endl' to whatever you wish
+	Prints the entity to 'stream' (std::cout by default) followed by 'endl' ("\n") by default
+	There is an optional second argument you can use to specify the output stream
+	There is an optional third argument you can use to change 'endl' to whatever you wish
 	*/
 	template<class T>
 	void print(const T & input, std::ostream & stream = std::cout, std::string endl = "\n");
