@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -38,6 +39,16 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 			return true;
 		}
 	}
+}
+
+void utils::print(const bool input, std::ostream & stream, std::string endl)
+{
+	if (input)
+		stream << "True" << std::endl;
+	else
+		stream << "False" << std::endl;
+	
+	return;
 }
 
 void utils::trim(std::string & input)

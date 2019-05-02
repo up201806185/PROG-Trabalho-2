@@ -1,7 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <iostream>
 #include <string>
+#include <ostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -16,7 +18,7 @@ namespace utils
 	*/
 	bool read_str(std::istream & stream, std::string & input, bool read_only_one_string = false);
 
-	/*
+	/**
 	Assigns the first integer it finds in 'stream' to 'input'
 	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
 	an EOF happened while consuming the 'stream'
@@ -28,7 +30,7 @@ namespace utils
 	template<class T>
 	bool read_num(std::istream & stream, T & input);
 	
-	/*
+	/**
 	Assigns the first integer it finds in 'str' to 'input'
 	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
 	an EOF happened while reading the 'str'
@@ -38,6 +40,19 @@ namespace utils
 	*/
 	template<class T>
 	bool read_num(const std::string & str, T & input);
+
+	/**
+	Prints the variable to 'stream' followed by 'endl' which default is a newline character
+	There is an optional third argument which you can use to change 'endl' to whatever you wish
+	*/
+	void print(const bool input, std::ostream & stream = std::cout, std::string endl = "\n");
+
+	/**
+	Prints the variable to 'stream' followed by 'endl' which default is a newline character
+	There is an optional third argument which you can use to change 'endl' to whatever you wish
+	*/
+	template<class T>
+	void print(const T & input, std::ostream & stream = std::cout, std::string endl = "\n");
 
 	/**
 	Trims all whitespace at the beggining and end of the string 'input'
@@ -105,6 +120,13 @@ bool utils::read_num(const std::string & str, T & input)
 	temp_stream >> input;
 
 	return (!temp_stream.fail());
+}
+
+template<class T>
+void utils::print(const T & input, std::ostream & stream , std::string endl)
+{
+	stream << input << endl;
+	return;
 }
 
 
