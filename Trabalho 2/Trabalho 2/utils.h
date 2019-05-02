@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 namespace utils
@@ -77,5 +78,34 @@ namespace utils
 	*/
 	void clear_screen();
 }
+
+template <class T>
+bool utils::read_num(std::istream & stream, T & input)
+{
+	input = 0;
+
+	std::string temp_string;
+	if (!read_str(stream, temp_string))
+	{
+		if (stream.eof())
+		{
+			input = std::numeric_limits<T>::max();
+		}
+		return false;
+	}
+
+	return utils::read_num(temp_string, input);
+}
+
+template <class T>
+bool utils::read_num(const std::string & str, T & input)
+{
+	std::istringstream temp_stream(str);
+
+	temp_stream >> input;
+
+	return (!temp_stream.fail());
+}
+
 
 #endif

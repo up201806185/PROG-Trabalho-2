@@ -1,5 +1,4 @@
 #include "utils.h"
-
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -40,35 +39,6 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 		}
 	}
 }
-
-template <class T>
-bool utils::read_num(std::istream & stream, T & input)
-{
-	input = 0;
-
-	std::string temp_string;
-	if (!read_str(stream, temp_string))
-	{
-		if (stream.eof())
-		{
-			input = std::numeric_limits<T>::max();
-		}
-		return false;
-	}
-
-	return utils::read_num(temp_string, input);
-}
-
-template <class T>
-bool utils::read_num(const std::string & str, T & input)
-{
-	std::istringstream temp_stream(str);
-
-	temp_stream >> input;
-	
-	return (!temp_stream.fail());
-}
-
 
 void utils::trim(std::string & input)
 {
