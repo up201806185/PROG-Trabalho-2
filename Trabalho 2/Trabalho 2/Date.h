@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef DATE_H
+#define DATE_H
 
 #include <string>
 #include <istream>
@@ -25,14 +25,17 @@ public:
 	bool parse(std::string input);
 	void set_today();
 
-	void get_day();
-	void get_month();
-	void get_year();
+	unsigned short int get_day();
+	unsigned short int get_month();
+	unsigned short int get_year();
 	std::string get_date();
+	bool valid();
 private:
+	bool set_error(std::string error_str);
 	unsigned short int days_in_month();
 	unsigned short int days_in_feb();
-	void reset_date();
+	void reset();
+	bool check_validity();
 	std::string error_message;
 	bool is_valid;
 	unsigned short int day;
