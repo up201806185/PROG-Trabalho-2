@@ -101,7 +101,7 @@ unsigned short int Date::get_year()
 	return year;
 }
 
-std::string Date::get_date()
+std::string Date::str() const
 {
 	return std::to_string(year) + '/' + std::to_string(month) + '/' + std::to_string(day);
 }
@@ -127,7 +127,7 @@ unsigned short int Date::days_in_month()
 	case 4: case 6: case 9: case 11:
 		return 30;
 	case 2:
-		if (leap_year)
+		if (leap_year())
 			return 29;
 		else
 			return 28;
@@ -200,4 +200,10 @@ bool operator>=(const Date & l, const Date & r)
 bool operator<=(const Date & l, const Date & r)
 {
 	return operator==(l, r) || operator<(l, r);
+}
+
+std::ostream & operator<<(std::ostream & stream, const Date & date)
+{
+	stream << date.str();
+	return stream;
 }

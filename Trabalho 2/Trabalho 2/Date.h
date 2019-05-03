@@ -3,6 +3,7 @@
 
 #include <string>
 #include <istream>
+#include <fstream>
 class Date
 {
 	friend bool operator==(const Date & l, const Date & r);
@@ -11,6 +12,8 @@ class Date
 	friend bool operator!=(const Date & l, const Date & r);
 	friend bool operator>=(const Date & l, const Date & r);
 	friend bool operator<=(const Date & l, const Date & r);
+
+	friend std::ostream& operator<<(std::ostream& stream, const Date & date);
 public:
 	Date();
 	Date(std::istream & stream);
@@ -29,7 +32,7 @@ public:
 	unsigned short int get_day();
 	unsigned short int get_month();
 	unsigned short int get_year();
-	std::string get_date();
+	std::string str() const;
 	bool valid();
 private:
 	bool set_error(std::string error_str);
