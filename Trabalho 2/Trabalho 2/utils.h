@@ -42,6 +42,11 @@ namespace utils
 	bool read_num(const std::string & str, T & input);
 
 	/**
+	Waits for the Enter key to be pressed
+	*/
+	void wait_for_enter();
+
+	/**
 	Prints the entity to 'stream' (std::cout by default) followed by 'endl' ("\n") by default
 	There is an optional second argument you can use to specify the output stream
 	There is an optional third argument you can use to change 'endl' to whatever you wish

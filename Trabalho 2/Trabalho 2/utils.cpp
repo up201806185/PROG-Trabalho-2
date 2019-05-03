@@ -41,6 +41,15 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 	}
 }
 
+void utils::wait_for_enter()
+{
+	std::string temp;
+
+	utils::read_str(std::cin, temp, true);
+
+	return;
+}
+
 void utils::print(const bool input, std::ostream & stream, std::string endl)
 {
 	if (input)
