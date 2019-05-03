@@ -33,7 +33,7 @@ public:
 private:
 	bool set_error(std::string error_str);
 	unsigned short int days_in_month();
-	unsigned short int days_in_feb();
+	bool leap_year();
 	void reset();
 	bool check_validity();
 	std::string error_message;

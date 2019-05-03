@@ -35,17 +35,20 @@ Date::~Date()
 
 bool Date::set_day(const unsigned short int day)
 {
-	return false;
+	this->day = day;
+	return check_validity();
 }
 
 bool Date::set_month(const unsigned short int month)
 {
-	return false;
+	this->month = month;
+	return check_validity();
 }
 
 bool Date::set_year(const unsigned short int year)
 {
-	return false;
+	this->year = year;
+	return check_validity();
 }
 
 bool Date::parse(std::istream & stream)
@@ -101,7 +104,7 @@ unsigned short int Date::get_year()
 
 std::string Date::get_date()
 {
-	return std::string();
+	return std::to_string(year) + '/' + std::to_string(month) + '/' + std::to_string(day);
 }
 
 bool Date::valid()
@@ -118,12 +121,27 @@ bool Date::set_error(std::string error_str)
 
 unsigned short int Date::days_in_month()
 {
-	return 0;
+	switch (month)
+	{
+	case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+		return 31;
+	case 4: case 6: case 9: case 11:
+		return 30;
+	case 2:
+		if (leap_year)
+			return 29;
+		else
+			return 28;
+	}
 }
 
-unsigned short int Date::days_in_feb()
-{
-	return 0;
+bool Date::leap_year()
+{//Stolen from 3.6
+	if (year % 400 == 0) return true;
+
+	if ((year % 4 == 0) && (year % 100 != 0)) return true;
+
+	return false;
 }
 
 void Date::reset()
@@ -136,5 +154,12 @@ void Date::reset()
 
 bool Date::check_validity()
 {
-	
+	if (
+		((1900 < year) && (year < 2100)) &&
+		((1 <= month) && (month <= 12)) &&
+		((1 <= day) && (day <= days_in_month()))
+		)
+		return is_valid = true;
+	else
+		return set_error("Incoherent date error");
 }
