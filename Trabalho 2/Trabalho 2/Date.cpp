@@ -28,7 +28,6 @@ Date::Date(unsigned short int day, unsigned short int month, unsigned short int 
 	return;
 }
 
-
 Date::~Date()
 {
 }
@@ -162,4 +161,43 @@ bool Date::check_validity()
 		return is_valid = true;
 	else
 		return set_error("Incoherent date error");
+}
+
+bool operator==(const Date & l, const Date & r)
+{
+	return (l.day == r.day) && (l.month == r.month) && (l.year == r.year);
+}
+
+bool operator>(const Date & l, const Date & r)
+{
+	if      (l.year > r.year) return true;
+	else if (l.year < r.year) return false;
+
+	if      (l.month > r.month) return true;
+	else if (l.month < r.month) return false;
+
+	if      (l.day > r.day) return true;
+	else if (l.day < r.day) return false;
+
+	return false;//They are equal
+}
+
+bool operator<(const Date & l, const Date & r)
+{
+	return !(operator==(l, r) || operator>(l, r));
+}
+
+bool operator!=(const Date & l, const Date & r)
+{
+	return operator==(l, r);
+}
+
+bool operator>=(const Date & l, const Date & r)
+{
+	return operator==(l, r) || operator>(l, r);
+}
+
+bool operator<=(const Date & l, const Date & r)
+{
+	return operator==(l, r) || operator<(l, r);
 }

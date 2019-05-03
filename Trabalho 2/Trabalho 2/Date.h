@@ -5,11 +5,12 @@
 #include <istream>
 class Date
 {
-//friend:
-//<< operator
-//== operator
-//< operator
-//> operator
+	friend bool operator==(const Date & l, const Date & r);
+	friend bool operator> (const Date & l, const Date & r);
+	friend bool operator< (const Date & l, const Date & r);
+	friend bool operator!=(const Date & l, const Date & r);
+	friend bool operator>=(const Date & l, const Date & r);
+	friend bool operator<=(const Date & l, const Date & r);
 public:
 	Date();
 	Date(std::istream & stream);
