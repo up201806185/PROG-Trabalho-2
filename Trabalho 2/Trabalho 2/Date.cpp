@@ -101,6 +101,7 @@ void Date::set_today()//Help me Rafael
 	month = 1 + bt.tm_mon;
 	day = bt.tm_mday;
 
+	is_valid = true;
 	return;
 }
 
@@ -127,6 +128,11 @@ std::string Date::str() const
 bool Date::valid()
 {
 	return this->is_valid;
+}
+
+std::string Date::get_error()
+{
+	return error_message;
 }
 
 bool Date::set_error(std::string error_str)

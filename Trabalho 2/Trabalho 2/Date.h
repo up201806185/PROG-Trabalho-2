@@ -34,6 +34,7 @@ public:
 	unsigned short int get_year();
 	std::string str() const;
 	bool valid();
+	std::string get_error();
 private:
 	bool set_error(std::string error_str);
 	unsigned short int days_in_month();
