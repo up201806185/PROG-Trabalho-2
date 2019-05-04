@@ -11,19 +11,18 @@ Client::~Client()
 {
 }
 
-Client::Client(string name, unsigned nif, unsigned short f_size, Address address) {
+Client::Client(std::string name, unsigned nif, unsigned short f_size, Address address) {
 	this->name = name;
 	this->nif = f_size;
 	this->f_size = f_size;
 	this->address = address;
 }
 
-Client::Client(string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet> & packets, unsigned totalPurchased) {
+Client::Client(std::string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet> & packets, unsigned totalPurchased) {
 
 	// REQUIRES IMPLEMENTATION 
 }
 
-// GET methods
 
 std::string Client::get_name() {
 
@@ -40,7 +39,7 @@ unsigned short Client::get_f_size() {
 	return f_size;
 }
 
-Address Client::getAddress() {
+Address Client::get_address() {
 
 	return address;
 }
@@ -78,7 +77,7 @@ void Client::set_packs(std::vector<Travelpack> &packs) {
 
 	this->packs = packs;
 }
-unsigned Client::set_total_purchased(size_t total_purchased) {
+void Client::set_total_purchased(size_t total_purchased) {
 
 	this->total_purchased = total_purchased;
 }
@@ -86,6 +85,7 @@ unsigned Client::set_total_purchased(size_t total_purchased) {
 
 std::ostream& operator<<(std::ostream& out, const Client & client) {
 
-	// REQUIRES IMPLEMENTATION 
+	out << client.str();
+	return out;
 
 }

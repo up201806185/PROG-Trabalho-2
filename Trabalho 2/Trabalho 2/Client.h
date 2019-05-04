@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CLIENT.H
+#define CLIENT.H
 
 #include <fstream>
 #include <string>
@@ -16,12 +17,12 @@ public:
 
 	~Client();
 
-	std::string get_name();
-	size_t get_nif();
-	unsigned short get_f_size();
-	Address get_address();
+	std::string             get_name();
+	size_t                  get_nif();
+	unsigned short          get_f_size();
+	Address                 get_address();
 	std::vector<Travelpack> get_packs();
-	size_t get_total_purchased();
+	size_t                  get_total_purchased();
 
 	void set_name(std::string name);
 	void set_nif(size_t nif);
@@ -39,3 +40,4 @@ private:
 	size_t total_purchased;
 };
 
+#endif
