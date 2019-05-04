@@ -1,7 +1,10 @@
 #include <iostream>
 #include "utils.h"
+#include "Date.h"
 
 int main()
 {
-	utils::print("Hello there");
+	Date d;
+	d.set_today();
+	std::cout << d << std::endl;
 }
