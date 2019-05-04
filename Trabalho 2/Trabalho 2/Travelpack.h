@@ -17,5 +17,8 @@ private:
 	double price_per_person;
 	size_t max_bought_tickets;
 	size_t bought_tickets;
+
+	bool is_valid;
+	std::string error_message;
 };
 
