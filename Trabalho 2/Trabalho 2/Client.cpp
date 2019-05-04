@@ -11,19 +11,6 @@ Client::~Client()
 {
 }
 
-Client::Client(std::string name, unsigned nif, unsigned short f_size, Address address) {
-	this->name = name;
-	this->nif = f_size;
-	this->f_size = f_size;
-	this->address = address;
-}
-
-Client::Client(std::string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet> & packets, unsigned totalPurchased) {
-
-	// REQUIRES IMPLEMENTATION 
-}
-
-
 std::string Client::get_name() {
 
 	return name;

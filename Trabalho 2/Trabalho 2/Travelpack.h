@@ -31,7 +31,7 @@ public:
 
 	bool purchase_n_tickets(unsigned short n_tickets);
 private:
-	static std::vector<Travelpack> travelpacks;//We do this so that we don't have to deal with memory allocation
+	static std::vector<Travelpack&> travelpacks;//We do this so that we don't have to deal with memory allocation
 
 	bool available;
 	size_t id;
