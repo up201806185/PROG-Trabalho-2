@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <ctime>
 
 Date::Date()
 {
@@ -84,6 +85,23 @@ bool Date::parse(std::string input)
 
 void Date::set_today()//Help me Rafael
 {
+	time_t timer = std::time(NULL);
+	std::tm bt;
+#if defined(__unix__)
+	localtime_r(&timer, &bt);
+#elif defined(_MSC_VER)
+	localtime_s(&bt, &timer);
+#else
+	static std::mutex mtx;
+	std::lock_guard<std::mutex> lock(mtx);
+	bt = *std::localtime(&timer);
+#endif
+	
+	year = 1900 + bt.tm_year;
+	month = 1 + bt.tm_mon;
+	day = bt.tm_mday;
+
+	return;
 }
 
 unsigned short int Date::get_day()
