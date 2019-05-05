@@ -88,17 +88,17 @@ void Date::set_today()//Help me Rafael
 	return;
 }
 
-unsigned short int Date::get_day()
+unsigned short int Date::get_day() const
 {
 	return day;
 }
 
-unsigned short int Date::get_month()
+unsigned short int Date::get_month() const
 {
 	return month;
 }
 
-unsigned short int Date::get_year()
+unsigned short int Date::get_year() const
 {
 	return year;
 }
@@ -108,17 +108,17 @@ std::string Date::str() const
 	return std::to_string(year) + '/' + std::to_string(month) + '/' + std::to_string(day);
 }
 
-bool Date::valid()
+bool Date::valid() const
 {
-	return this->is_valid;
+	return is_valid;
 }
 
-std::string Date::get_error()
+std::string Date::get_error() const
 {
 	return error_message;
 }
 
-bool Date::set_error(std::string error_str)
+bool Date::set_error(std::string error_str) 
 {
 	is_valid = false;
 	error_message = error_str;

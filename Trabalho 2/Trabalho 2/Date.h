@@ -25,12 +25,12 @@ public:
 	bool parse(std::string input);
 	void set_today();
 
-	unsigned short int get_day();
-	unsigned short int get_month();
-	unsigned short int get_year();
+	unsigned short int get_day() const;
+	unsigned short int get_month() const;
+	unsigned short int get_year() const;
 	std::string str() const;
-	bool valid();
-	std::string get_error();
+	bool valid() const;
+	std::string get_error() const;
 private:
 	bool set_error(std::string error_str);
 	unsigned short int days_in_month();
