@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRAVELPACK_H
+#define TRAVELPACK_H
 
 #include <string>
 #include <vector>
@@ -31,7 +32,7 @@ public:
 
 	bool purchase_n_tickets(unsigned short n_tickets);
 private:
-	static std::vector<Travelpack&> travelpacks;//We do this so that we don't have to deal with memory allocation
+	static std::vector<Travelpack> travelpacks;
 
 	bool available;
 	size_t id;
@@ -46,3 +47,4 @@ private:
 	std::string error_message;
 };
 
+#endif

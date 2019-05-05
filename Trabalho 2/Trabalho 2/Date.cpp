@@ -25,30 +25,12 @@ Date::Date(unsigned short int day, unsigned short int month, unsigned short int 
 	this->day = day;
 	this->month = month;
 	this->year = year;
-	check_validity();
+	check_coherence();
 	return;
 }
 
 Date::~Date()
 {
-}
-
-bool Date::set_day(const unsigned short int day)
-{
-	this->day = day;
-	return check_validity();
-}
-
-bool Date::set_month(const unsigned short int month)
-{
-	this->month = month;
-	return check_validity();
-}
-
-bool Date::set_year(const unsigned short int year)
-{
-	this->year = year;
-	return check_validity();
 }
 
 bool Date::parse(std::istream & stream)
@@ -75,7 +57,8 @@ bool Date::parse(std::string input)
 
 	if (utils::read_num(parts[0], year) && utils::read_num(parts[1], month) && utils::read_num(parts[2], day))
 	{
-		return check_validity();
+		error_message = "";
+		return check_coherence();
 	}
 	else
 	{
@@ -155,6 +138,8 @@ unsigned short int Date::days_in_month()
 			return 29;
 		else
 			return 28;
+	default:
+		return 0;
 	}
 }
 
@@ -175,7 +160,7 @@ void Date::reset()
 	set_error("Uninitialized date");
 }
 
-bool Date::check_validity()
+bool Date::check_coherence()
 {
 	if (
 		((1900 < year) && (year < 2100)) &&

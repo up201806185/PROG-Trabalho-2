@@ -2,8 +2,7 @@
 #define DATE_H
 
 #include <string>
-#include <istream>
-#include <fstream>
+#include <ostream>
 class Date
 {
 	friend bool operator==(const Date & l, const Date & r);
@@ -22,9 +21,6 @@ public:
 
 	~Date();
 
-	bool set_day(const unsigned short int day);
-	bool set_month(const unsigned short int month);
-	bool set_year(const unsigned short int year);
 	bool parse(std::istream & stream);
 	bool parse(std::string input);
 	void set_today();
@@ -40,7 +36,7 @@ private:
 	unsigned short int days_in_month();
 	bool leap_year();
 	void reset();
-	bool check_validity();
+	bool check_coherence();
 	std::string error_message;
 	bool is_valid;
 	unsigned short int day;

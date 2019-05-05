@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AGENCY_H
+#define AGENCY_H
 class Agency
 {
 public:
@@ -6,3 +7,4 @@ public:
 	~Agency();
 };
 
+#endif

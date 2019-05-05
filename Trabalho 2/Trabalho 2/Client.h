@@ -36,7 +36,7 @@ private:
 	size_t nif;
 	unsigned short f_size;
 	Address address;
-	std::vector <Travelpack&> packs;
+	std::vector <Travelpack> packs;
 	size_t total_purchased;
 };
 
