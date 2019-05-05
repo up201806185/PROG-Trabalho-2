@@ -48,7 +48,7 @@ bool Address::parse(std::istream & stream)
 bool Address::parse(std::string input)
 {
 	std::vector<std::string> parts = utils::split(input, '/');
-	if (parts.size() > 5)
+	if (parts.size() != 5)
 	{
 		return set_error("Parsing error");
 	}
@@ -56,11 +56,10 @@ bool Address::parse(std::string input)
 
 	if (!utils::read_num(parts[1], door_number))
 		return set_error("Parsing error");
-	street = parts[2];
-	street = parts[3];
-	street = parts[4];
-
-	return true;
+	floor = parts[2];
+	postal_code = parts[3];
+	location = parts[4];
+	return is_valid = true;
 }
 
 std::string Address::get_street() const

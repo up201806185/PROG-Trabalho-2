@@ -1,10 +1,16 @@
 #include <iostream>
 #include "utils.h"
 #include "Date.h"
+#include "Address.h"
 
+using utils::print;
 int main()
 {
-	Date d;
-	d.set_today();
-	std::cout << d << std::endl;
+	while (true)
+	{
+		Address d(std::cin);
+		print(d.valid());
+		print(d.get_error());
+		print(d);
+	}
 }
