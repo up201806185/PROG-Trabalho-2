@@ -10,6 +10,7 @@ Travelpack::~Travelpack()
 
 void Travelpack::load(const std::string & path)
 {
+	
 }
 
 bool Travelpack::purchase_n_tickets(unsigned short n_tickets)

@@ -30,11 +30,18 @@ public:
 	double                   get_price_per_person();
 	size_t                   get_max_bought_tickets();
 	size_t                   get_bought_tickets();
+	
+	bool valid() const;
+	std::string get_error() const;
 
 	bool purchase_n_tickets(unsigned short n_tickets);
 private:
 	bool check_coherence();
 	bool set_error(std::string error_str);
+	/**Returns true if the parsing went ok and the data is coherent
+	Else returns false. Use the get_error method to see what happened
+	*/
+	bool parse(std::ifstream & stream);
 
 
 	static std::vector<Travelpack*> travelpacks;
