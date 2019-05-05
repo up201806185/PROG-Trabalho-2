@@ -5,6 +5,13 @@
 #include <vector>
 #include <ctime>
 
+Date Date::get_today()
+{
+	Date result;
+	result.set_today();
+	return result;
+}
+
 Date::Date()
 {
 	reset();

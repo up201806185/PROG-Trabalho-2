@@ -9,7 +9,7 @@
 
 class Client
 {
-	friend std::ostream& operator<<(std::ostream& out, const Client & client);
+	friend std::ostream&  operator<<(std::ostream& out, const Client & client);
 	friend std::ofstream& operator<<(std::ofstream& out, const Client & client);
 
 
@@ -18,7 +18,8 @@ public:
 
 	~Client();
 
-	static bool read_file(const std::string & path);
+	static void load(const std::string & path);
+	static void save(const std::string & path);
 
 	static void new_from_console();
 	void        edit();
@@ -36,7 +37,7 @@ private:
 	size_t nif;
 	unsigned short f_size;
 	Address address;
-	std::vector <Travelpack> packs;
+	std::vector <Travelpack*> packs;
 	size_t total_purchased;
 };
 

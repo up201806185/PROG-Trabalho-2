@@ -14,6 +14,8 @@ class Date
 
 	friend std::ostream& operator<<(std::ostream& stream, const Date & date);
 public:
+	static Date get_today();
+
 	Date();
 	Date(std::istream & stream);
 	Date(std::string input);

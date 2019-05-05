@@ -15,7 +15,8 @@ public:
 	Travelpack();
 	~Travelpack();
 
-	static bool read_file(const std::string & path);
+	static void load(const std::string & path);
+	static void save(const std::string & path);
 
 	static void new_from_console();
 	void        edit();
@@ -32,7 +33,11 @@ public:
 
 	bool purchase_n_tickets(unsigned short n_tickets);
 private:
-	static std::vector<Travelpack> travelpacks;
+	bool check_coherence();
+	bool set_error(std::string error_str);
+
+
+	static std::vector<Travelpack*> travelpacks;
 
 	bool available;
 	size_t id;
