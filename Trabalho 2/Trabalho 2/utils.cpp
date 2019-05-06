@@ -135,6 +135,34 @@ void utils::clear_screen()
 	system("cls");
 }
 
+std::string utils::yes_no_prompt(std::string prompt, std::string default_answer)
+{
+	std::string temp;
+
+	while (true)
+	{
+		std::cout << prompt;
+		if (!utils::read_str(std::cin, temp))
+		{
+			if (temp == "EOF")
+				return "EOF";
+			else
+			{
+				if (default_answer == "YES" || default_answer == "NO")
+					return default_answer;
+				continue;
+			}
+		}
+		temp = utils::uppercase(temp);
+		if (temp == "Y" || temp == "YES" || temp == "YEP")
+			return "YES";
+		else if (temp == "N" || temp == "NO" || temp == "NOPE")
+			return "NO";
+		else if (default_answer == "YES" || default_answer == "NO")
+			return default_answer;
+	}
+}
+
 
 /**
 Returns the number of ocurrences of char 'delim' in the string 'input'

@@ -22,14 +22,14 @@ public:
 	void        edit();
 	void        mark_as_unavailable();
 
-	size_t                   get_id();
-	bool					 get_available();
-	std::vector<std::string> get_destinations();
-	Date                     get_begginning();
-	Date                     get_end();
-	double                   get_price_per_person();
-	size_t                   get_max_bought_tickets();
-	size_t                   get_bought_tickets();
+	size_t                   get_id() const;
+	bool					 get_available() const;
+	std::vector<std::string> get_destinations() const;
+	Date                     get_begginning() const;
+	Date                     get_end() const;
+	double                   get_price_per_person() const;
+	size_t                   get_max_bought_tickets() const;
+	size_t                   get_bought_tickets() const;
 	
 	bool valid() const;
 	std::string get_error() const;
@@ -45,6 +45,11 @@ private:
 
 	bool parse_destinations(std::istream & stream);
 	void print_destinations(std::ostream & stream) const;
+
+	bool granular_edit(const bool keep_info[], bool edit_mode);
+
+	void print(std::ostream & stream) const;
+	void pprint(bool with_delimiters = true);
 
 	static std::vector<Travelpack*> travelpacks;
 

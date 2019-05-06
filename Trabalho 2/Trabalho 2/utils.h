@@ -24,7 +24,7 @@ namespace utils
 	an EOF happened while consuming the 'stream'
 	Note: the entire line is consumed, therefore it will read the first integer from the line and discard the rest of the line
 	Helpful tip: use this function from <limits> to get the maximum possible integer
-	std::numeric_limits<your_datatype>::max();
+	std::numeric_limits<your_datatype>::max()
 	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
 	*/
 	template<class T>
@@ -35,7 +35,7 @@ namespace utils
 	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
 	an EOF happened while reading the 'str'
 	Helpful tip: use this function from <limits> to get the maximum possible integer
-	std::numeric_limits<your_datatype>::max();
+	std::numeric_limits<your_datatype>::max()
 	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
 	*/
 	template<class T>
@@ -99,6 +99,14 @@ namespace utils
 	Clears the console screen
 	*/
 	void clear_screen();
+
+	/**
+	'prompt' is printed to screen until the user enters either 'yes' or 'no', or ctrl+Z
+	The function either returns "YES", "NO", or "EOF", to signal that the user pressed ctr+Z
+	There is an second optional argument to indicate what to return in case the user inputs something not nominal
+	Naturally, if this second argument (must be either "YES" or "NO") is used, the function won't indefinitely repeat
+	*/
+	std::string yes_no_prompt(std::string prompt, std::string default_answer = "");
 }
 
 template <class T>
