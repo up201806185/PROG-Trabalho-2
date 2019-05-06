@@ -121,6 +121,11 @@ bool Travelpack::save(const std::string & path)
 	return true;
 }
 
+size_t Travelpack::get_bought_tickets()
+{
+	return bought_tickets;
+}
+
 bool Travelpack::valid() const
 {
 	return is_valid;
@@ -325,4 +330,39 @@ std::ofstream & operator<<(std::ofstream & stream, const Travelpack & travelpack
 	stream << travelpack.bought_tickets     << std::endl;
 
 	return stream;
+}
+
+size_t Travelpack::get_id()
+{
+	return id;
+}
+
+bool Travelpack::get_available()
+{
+	return available;
+}
+
+std::vector<std::string> Travelpack::get_destinations()
+{
+	return destinations;
+}
+
+Date Travelpack::get_begginning()
+{
+	return begginning;
+}
+
+Date Travelpack::get_end()
+{
+	return end;
+}
+
+double Travelpack::get_price_per_person()
+{
+	return price_per_person;
+}
+
+size_t Travelpack::get_max_bought_tickets()
+{
+	return max_bought_tickets;
 }
