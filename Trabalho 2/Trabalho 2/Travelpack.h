@@ -16,7 +16,7 @@ public:
 	~Travelpack();
 
 	static void load(const std::string & path);
-	static void save(const std::string & path);
+	static bool save(const std::string & path);
 
 	static void new_from_console();
 	void        edit();
@@ -43,6 +43,8 @@ private:
 	*/
 	bool parse(std::ifstream & stream);
 
+	bool parse_destinations(std::istream & stream);
+	void print_destinations(std::ostream & stream) const;
 
 	static std::vector<Travelpack*> travelpacks;
 
