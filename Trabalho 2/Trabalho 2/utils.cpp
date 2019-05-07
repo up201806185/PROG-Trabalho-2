@@ -142,7 +142,7 @@ std::string utils::yes_no_prompt(std::string prompt, std::string default_answer)
 	while (true)
 	{
 		std::cout << prompt;
-		if (!utils::read_str(std::cin, temp))
+		if (!utils::read_str(std::cin, temp, true))
 		{
 			if (temp == "EOF")
 				return "EOF";

@@ -9,13 +9,26 @@ const std::string DELIMITER = "::::::::::";
 const std::string FANCY_DELIMITER = std::string(55, '=');
 std::vector<Travelpack*> Travelpack::travelpacks;
 const std::vector<std::string> LABELS = 
-{"ID : ",
-"Destinations : ", 
-"Begginning date : ", 
-"Ending date : ", 
-"Price(per person) : ",
-"Maximum number of tickets : ",
-"Purchased tickets : "};
+{
+"ID                         :",
+"Destinations               :", 
+"Begginning date            :", 
+"Ending date                :", 
+"Price(per person)          :",
+"Maximum number of tickets  :",
+"Purchased tickets          :"
+};
+
+const std::vector<std::string> EDIT_LABELS =
+{
+"ID                         :",
+"Destinations (a - b, c, d) :",
+"Begginning date(YYYY/MM/DD):",
+"Ending date    (YYYY/MM/DD):",
+"Price(per person)          :",
+"Maximum number of tickets  :",
+"Purchased tickets          :"
+};
 
 bool want_to_exit()
 {
@@ -339,8 +352,8 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		std::cout << "Information of travel pack to be edited:" << std::endl;
 		pprint();
+		std::cout << std::endl;
 	}
-	std::cout << std::endl;
 
 	//Travelpack ID
 	std::cout << LABELS[0] << id << std::endl;
@@ -385,7 +398,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::cout << LABELS[1] << " (a-b,c,d) ";
+			std::cout << EDIT_LABELS[1];
 			if (new_travelpack.parse_destinations(std::cin))
 				break;
 			if (new_travelpack.error_message == "EOF")
@@ -408,7 +421,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::cout << LABELS[2] << " (YYYY/MM/DD) ";
+			std::cout << EDIT_LABELS[2];
 			if (new_travelpack.begginning.parse(std::cin))
 				break;
 
@@ -432,7 +445,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::cout << LABELS[3] << " (YYYY/MM/DD) ";
+			std::cout << EDIT_LABELS[3];
 			if (new_travelpack.end.parse(std::cin))
 				break;
 
@@ -456,7 +469,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::cout << LABELS[4];
+			std::cout << EDIT_LABELS[4];
 			if (utils::read_num(std::cin, new_travelpack.price_per_person))
 				break;
 
@@ -480,7 +493,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::cout << LABELS[5];
+			std::cout << EDIT_LABELS[5];
 			if (utils::read_num(std::cin, new_travelpack.max_bought_tickets))
 				break;
 
@@ -504,7 +517,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::cout << LABELS[6];
+			std::cout << EDIT_LABELS[6];
 			if (utils::read_num(std::cin, new_travelpack.bought_tickets))
 				break;
 
@@ -548,7 +561,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 		utils::print("A coherency error was detected:");
 		utils::print(new_travelpack.error_message);
 
-		const bool CHANGE_DATES[] =        { true, true, false, false, true, true, true };
+		const bool CHANGE_DATES[] =        { true, true, false, false, true, true, true};
 		const bool CHANGE_MAX_TICKETS[] =  { true, true, true, true, true, false, true };
 		const bool CHANGE_TICKET_PRICE[] = { true, true, true, true, false, true, true };
 
@@ -666,7 +679,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	utils::wait_for_enter();
 
 	//Do you wish to save?
-	std::string answer = utils::yes_no_prompt("Do you wish to save(Y/n)? :> ");
+	std::string answer = utils::yes_no_prompt("Do you wish to save(Y/n)? :> ", "YES");
 	if (answer == "YES")
 	{
 		load_state(new_travelpack);
