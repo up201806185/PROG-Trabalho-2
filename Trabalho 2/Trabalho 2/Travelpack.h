@@ -51,6 +51,8 @@ private:
 	void print(std::ostream & stream) const;
 	void pprint(bool with_delimiters = true);
 
+	void load_state(const Travelpack & donor);
+
 	static std::vector<Travelpack*> travelpacks;
 
 	bool available;

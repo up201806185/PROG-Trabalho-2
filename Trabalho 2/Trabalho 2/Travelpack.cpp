@@ -136,6 +136,15 @@ void Travelpack::new_from_console()
 {
 	Travelpack new_tp;
 	new_tp.id = travelpacks.size() + 1;
+	const bool CHANGE_EVERYTHING[] = { false, false, false, false, false, false, false };
+	if (new_tp.granular_edit(CHANGE_EVERYTHING, false))
+	{
+		Travelpack * ptr = new Travelpack;
+		*ptr = new_tp;
+		travelpacks.push_back(ptr);
+	}
+
+	return;
 }
 
 size_t Travelpack::get_bought_tickets() const
@@ -529,7 +538,146 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 		std::cout << std::endl;
 	}
 
-	//TODO:line 537 from Trabalho 1
+	//Check the coherence
+	std::cout << "Please press Enter to check for coherence errors:> ";
+	utils::wait_for_enter();
+	
+	while (!new_travelpack.check_coherence())
+	{
+		utils::clear_screen();
+		utils::print("A coherency error was detected:");
+		utils::print(new_travelpack.error_message);
+
+		const bool CHANGE_DATES[] =        { true, true, false, false, true, true, true };
+		const bool CHANGE_MAX_TICKETS[] =  { true, true, true, true, true, false, true };
+		const bool CHANGE_TICKET_PRICE[] = { true, true, true, true, false, true, true };
+
+		if (new_travelpack.error_message == "Incoherency error: The beggining date comes later than the finish date")
+		{
+			std::cout << "Please change the dates, press Enter to continue:> ";
+			utils::wait_for_enter();
+			if (new_travelpack.granular_edit(CHANGE_DATES, true))
+			{
+				load_state(new_travelpack);
+				return true;
+			}
+			else
+				return false;
+		}
+
+		if (new_travelpack.error_message == "Incoherency error : The begginning date comes sooner than today, yet the travelpack is set as available")
+		{
+			while (true)
+			{
+				utils::print("What do you wish to do?");
+				utils::print("Enter '1' if you wish to set the travelpack as unavailable");
+				utils::print("Enter '2' if you wish to change the dates");
+				std::cout << ":> ";
+				std::string answer;
+				if (!utils::read_str(std::cin, answer))
+				{
+					if (answer == "EOF")
+					{
+						if (want_to_exit())
+							return false;
+					}
+					continue;
+				}
+				
+				if (answer == "1")
+				{
+					new_travelpack.available = false;
+					std::cout << "The travelpack has been set as unavailable, press Enter to continue:> ";
+					utils::wait_for_enter();
+					break;
+				}
+				if (answer == "2")
+				{
+					std::cout << "Entering editing mode, press Enter to continue:> ";
+					utils::wait_for_enter();
+					if (new_travelpack.granular_edit(CHANGE_DATES, true))
+					{
+						load_state(new_travelpack);
+						return true;
+					}
+					else
+						return false;
+				}
+			}
+		}
+
+		if (new_travelpack.error_message == "Incoherency error: The travelpack is sold out, yet the travelpack is set as available")
+		{
+			while (true)
+			{
+				utils::print("What do you wish to do?");
+				utils::print("Enter '1' if you wish to set the travelpack as unavailable");
+				utils::print("Enter '2' if you wish to change maximum number of tickets");
+				std::cout << ":> ";
+				std::string answer;
+				if (!utils::read_str(std::cin, answer))
+				{
+					if (answer == "EOF")
+					{
+						if (want_to_exit())
+							return false;
+					}
+					continue;
+				}
+
+				if (answer == "1")
+				{
+					new_travelpack.available = false;
+					std::cout << "The travelpack has been set as unavailable, press Enter to continue:> ";
+					utils::wait_for_enter();
+					break;
+				}
+				if (answer == "2")
+				{
+					std::cout << "Entering editing mode, press Enter to continue:> ";
+					utils::wait_for_enter();
+					if (new_travelpack.granular_edit(CHANGE_MAX_TICKETS, true))
+					{
+						load_state(new_travelpack);
+						return true;
+					}
+					else
+						return false;
+				}
+			}
+		}
+
+		if (new_travelpack.error_message == "Incoherency error: The price can not be negative")
+		{
+			std::cout << "Please change the price, press Enter to continue:> ";
+			utils::wait_for_enter();
+			if (new_travelpack.granular_edit(CHANGE_TICKET_PRICE, true))
+			{
+				load_state(new_travelpack);
+				return true;
+			}
+			else
+				return false;
+		}
+	}
+
+	utils::clear_screen();
+	utils::print("No errors were detected, press enter to continue:> ");
+	utils::wait_for_enter();
+
+	//Do you wish to save?
+	std::string answer = utils::yes_no_prompt("Do you wish to save(Y/n)? :> ");
+	if (answer == "YES")
+	{
+		load_state(new_travelpack);
+		return true;
+	}
+	else
+	{
+		std::cout << "Please press Enter to exit editing mode:> ";
+		utils::wait_for_enter();
+		return false;
+	}
 }
 
 
@@ -539,6 +687,20 @@ void Travelpack::pprint(bool with_delimiters)
 	std::cout << FANCY_DELIMITER << std::endl;
 	print(std::cout);
 	std::cout << FANCY_DELIMITER << std::endl;
+}
+
+void Travelpack::load_state(const Travelpack & donor)
+{
+	id                 = donor.id;
+	available          = donor.available;
+	destinations       = donor.destinations;
+	begginning         = donor.begginning;
+	end                = donor.end;
+	price_per_person   = donor.price_per_person;
+	max_bought_tickets = donor.max_bought_tickets;
+	bought_tickets     = donor.bought_tickets;
+	is_valid           = donor.is_valid;
+	error_message      = donor.error_message;
 }
 
 void Travelpack::print(std::ostream & stream) const
