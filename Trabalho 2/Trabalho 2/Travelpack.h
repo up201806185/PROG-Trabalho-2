@@ -18,6 +18,9 @@ public:
 	static void load(const std::string & path);
 	static bool save(const std::string & path);
 
+	static bool id_exists(size_t id);
+	static Travelpack * get_pointer_from_id(size_t id);
+
 	static void new_from_console();
 	void        edit();
 	void        mark_as_unavailable();
@@ -49,7 +52,7 @@ private:
 	bool granular_edit(const bool keep_info[], bool edit_mode);
 
 	void print(std::ostream & stream) const;
-	void pprint(bool with_delimiters = true);
+	void pprint();
 
 	void load_state(const Travelpack & donor);
 
@@ -57,7 +60,7 @@ private:
 
 	bool available;
 	size_t id;
-	std::vector<std::string> destinations;
+	std::vector<std::string> destinations;//Duplicates can exist, I am not entirely sure how this could affect the the program
 	Date begginning;
 	Date end;
 	double price_per_person;

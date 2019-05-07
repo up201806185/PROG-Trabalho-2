@@ -145,6 +145,23 @@ bool Travelpack::save(const std::string & path)
 	return true;
 }
 
+bool Travelpack::id_exists(size_t id)
+{
+	return (id != 0 && travelpacks.size() >= id);
+}
+
+Travelpack * Travelpack::get_pointer_from_id(size_t id)
+{
+	if (!id_exists(id))
+	{
+		std::cout << "You are trying to access an ID that doesn't exist" << std::endl;
+		std::cout << "ID: " << id << std::endl;
+		exit(1);
+	}
+	else
+		return travelpacks[id - 1];
+}
+
 void Travelpack::new_from_console()
 {
 	Travelpack new_tp;
@@ -776,7 +793,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 
 
 
-void Travelpack::pprint(bool with_delimiters)
+void Travelpack::pprint()
 {
 	std::cout << FANCY_DELIMITER << std::endl;
 	print(std::cout);

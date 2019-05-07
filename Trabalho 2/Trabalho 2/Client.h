@@ -11,11 +11,8 @@ class Client
 {
 	friend std::ostream&  operator<<(std::ostream& out, const Client & client);
 	friend std::ofstream& operator<<(std::ofstream& out, const Client & client);
-
-
 public:
 	Client();
-
 	~Client();
 
 	static void load(const std::string & path);
@@ -23,22 +20,49 @@ public:
 
 	static void new_from_console();
 	void        edit();
-	void        mark_as_unavailable();
+	void        erase();
 
-	std::string             get_name();
-	size_t                  get_nif();
-	unsigned short          get_f_size();
-	Address                 get_address();
-	std::vector<Travelpack&>/*???*/ get_packs();
-	size_t                  get_total_purchased();
+	std::string              get_name() const;
+	size_t                   get_nif() const;
+	unsigned short           get_f_size() const;
+	Address                  get_address() const;
+	std::vector<Travelpack*> get_packs() const;
+	size_t                   get_total_purchased() const;
+
+	bool valid() const;
+	std::string get_error() const;
 
 private:
+	bool check_coherence();
+	bool set_error(std::string error_str);
+
+	/**Returns true if the parsing went ok and the data is coherent
+	Else returns false. Use the get_error method to see what happened
+	*/
+	bool parse(std::ifstream & stream);
+
+	bool parse_packs_purchased(std::istream & stream);
+	void print_packs_purchased(std::ostream & stream) const;
+
+	bool granular_edit(const bool keep_info[], bool edit_mode);
+
+	void print(std::ostream & stream) const;
+	void pprint();
+
+	void load_state(const Client & donor);
+
+	static std::vector<Client*> clients;
+
 	std::string name;
 	size_t nif;
 	unsigned short f_size;
 	Address address;
-	std::vector <Travelpack*> packs;
+	std::vector <Travelpack*> packs_purchased;//Could be a set, to ensure the uniqueness of each travelpack
 	size_t total_purchased;
-};
 
+	bool is_valid;
+	std::string error_message;
+
+	std::string additional_error_info;
+};
 #endif
