@@ -77,6 +77,14 @@ namespace utils
 	std::vector<std::string> split(std::string input, const char delimiter, size_t max_splits = -1); // -1 will make it loop back to its maximum value
 
 	/**
+	Fills 'output' with the casting of partitions of string 'input' that were seperated by the char 'delimiter'
+	Example: utils::parse_vector_of_nums(vec, "1,2,3" ',') will put {1, 2, 3} in vec (if vec allows)
+	Returns true if everything went OK, else returns false
+	*/
+	template <class T>
+	bool parse_vector_of_nums(std::vector<T> & output, const std::string & input, const char delimiter);
+
+	/**
 	Returns a string formed by all the elements in 'parts' with the string 'delimiter' in between them
 	More or less the opposite of utils::split
 	You may optionally choose to concatenate only a part of the vector by choosing the begginning index as the third argument
@@ -142,6 +150,21 @@ void utils::print(const T & input, std::ostream & stream , std::string endl)
 {
 	stream << input << endl;
 	return;
+}
+
+template<class T>
+bool utils::parse_vector_of_nums(std::vector<T>& output, const std::string & input, const char delimiter)
+{
+	std::vector<std::string> parts = utils::split(input, delimiter);
+
+	output.resize(parts.size());
+
+	for (size_t i = 0; i < parts.size(); i++)
+	{
+		if (!utils::read_num(parts[i], output[i]))
+			return false;
+	}
+	return true;
 }
 
 

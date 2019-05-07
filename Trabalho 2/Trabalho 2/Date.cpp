@@ -57,7 +57,7 @@ bool Date::parse(std::istream & stream)
 bool Date::parse(std::string input)
 {
 	std::vector<std::string> parts = utils::split(input, '/');
-	if (parts.size() > 3)
+	if (parts.size() != 3)
 	{
 		set_error("Parsing error");
 	}

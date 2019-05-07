@@ -10,24 +10,24 @@ const std::string FANCY_DELIMITER = std::string(55, '=');
 std::vector<Travelpack*> Travelpack::travelpacks;
 const std::vector<std::string> LABELS = 
 {
-"ID                         :",
-"Destinations               :", 
-"Begginning date            :", 
-"Ending date                :", 
-"Price(per person)          :",
-"Maximum number of tickets  :",
-"Purchased tickets          :"
+"ID                         : ",
+"Destinations               : ", 
+"Begginning date            : ", 
+"Ending date                : ", 
+"Price(per person)          : ",
+"Maximum number of tickets  : ",
+"Purchased tickets          : "
 };
 
 const std::vector<std::string> EDIT_LABELS =
 {
-"ID                         :",
-"Destinations (a - b, c, d) :",
-"Begginning date(YYYY/MM/DD):",
-"Ending date    (YYYY/MM/DD):",
-"Price(per person)          :",
-"Maximum number of tickets  :",
-"Purchased tickets          :"
+"ID                         : ",
+"Destinations (a - b, c, d) : ",
+"Begginning date(YYYY/MM/DD): ",
+"Ending date    (YYYY/MM/DD): ",
+"Price(per person)          : ",
+"Maximum number of tickets  : ",
+"Purchased tickets          : "
 };
 
 bool want_to_exit()
@@ -157,6 +157,84 @@ void Travelpack::new_from_console()
 		travelpacks.push_back(ptr);
 	}
 
+	return;
+}
+
+void Travelpack::edit()
+{
+	utils::clear_screen();
+
+	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << "[-] " << LABELS[0] << id << std::endl;
+	if (available)
+		utils::print("[1] Travelpack                   is available");
+	else
+		utils::print("[1] Travelpack                   is not available");
+	std::cout << "[2] " << LABELS[1]; print_destinations(std::cout);
+	std::cout << "[3] " << LABELS[2] << begginning << std::endl;
+	std::cout << "[4] " << LABELS[3] << end << std::endl;
+	std::cout << "[5] " << LABELS[4] << price_per_person << std::endl;
+	std::cout << "[6] " << LABELS[5] << max_bought_tickets << std::endl;
+	std::cout << "[7] " << LABELS[6] << bought_tickets << std::endl;
+	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << std::endl << std::endl;
+
+	while (true)
+	{
+		std::cout << "Please enter the numbers of the properties you wish to change (ex: 1,2,4) :> ";
+		std::vector<size_t> choices;
+		std::string input;
+		if (!utils::read_str(std::cin, input))
+		{
+			if (input == "EOF")
+			{
+				std::string answer = utils::yes_no_prompt("Do you wish to exit? (Y/n):> ", "YES");
+				if (answer == "YES")
+					return;
+			}
+			continue;
+		}
+
+		if (!utils::parse_vector_of_nums(choices, input, ','))
+			continue;
+
+		bool out_of_bounds = false;
+		for (size_t i : choices)
+		{
+			if (i == 0 || i >= 8)
+			{
+				out_of_bounds = true;
+				break;
+			}
+		}
+
+		if (out_of_bounds)
+		{
+			utils::print("Error, numbers must be between 1 and 7, please try again");
+			continue;
+		}
+
+		bool what_to_change[] = { true, true, true, true, true, true, true };
+		for (size_t i : choices)
+		{
+			what_to_change[i - 1] = false;
+		}
+
+		std::cout << "Press Enter to enter editing mode :> ";
+		utils::wait_for_enter();
+
+		granular_edit(what_to_change, true);
+		return;
+
+	}
+}
+
+void Travelpack::mark_as_unavailable()
+{
+	utils::clear_screen();
+	available = false;
+	utils::print("The travelpack has been set as unavailable, press Enter to continue:> ");
+	utils::wait_for_enter();
 	return;
 }
 
@@ -352,9 +430,11 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		std::cout << "Information of travel pack to be edited:" << std::endl;
 		pprint();
-		std::cout << std::endl;
+		std::cout << std::endl << std::endl;
 	}
 
+
+	utils::print(FANCY_DELIMITER);
 	//Travelpack ID
 	std::cout << LABELS[0] << id << std::endl;
 	new_travelpack.id = id;
@@ -372,7 +452,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	{
 		while (true)
 		{
-			std::string answer = utils::yes_no_prompt("Is the pack available? (Y/n):> ", "YES");
+			std::string answer = utils::yes_no_prompt("Is the pack available?(Y/n): ", "YES");
 			if (answer == "EOF")
 			{
 				if (want_to_exit())
@@ -530,6 +610,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 			}
 		}
 	}
+	utils::print(FANCY_DELIMITER);
 
 	//Display "before" travelpack and "after" travelpack
 	utils::clear_screen();
@@ -578,7 +659,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 				return false;
 		}
 
-		if (new_travelpack.error_message == "Incoherency error : The begginning date comes sooner than today, yet the travelpack is set as available")
+		if (new_travelpack.error_message == "Incoherency error: The begginning date comes sooner than today, yet the travelpack is set as available")
 		{
 			while (true)
 			{
@@ -720,9 +801,9 @@ void Travelpack::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("Travelpack is available", stream);
+		utils::print("Travelpack                   is available", stream);
 	else
-		utils::print("Travelpack is not available", stream);
+		utils::print("Travelpack                   is not available", stream);
 	stream << LABELS[1]; print_destinations(stream);
 	stream << LABELS[2] << begginning << std::endl;
 	stream << LABELS[3] << end << std::endl;
