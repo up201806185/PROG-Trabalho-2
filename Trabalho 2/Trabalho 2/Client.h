@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <set>
 #include "Travelpack.h"
 #include "Address.h"
 
@@ -27,7 +28,7 @@ public:
 	unsigned short           get_f_size() const;
 	Address                  get_address() const;
 	std::vector<Travelpack*> get_packs() const;
-	size_t                   get_total_purchased() const;
+	double                   get_total_purchased() const;
 
 	bool valid() const;
 	std::string get_error() const;
@@ -43,6 +44,7 @@ private:
 
 	bool parse_packs_purchased(std::istream & stream);
 	void print_packs_purchased(std::ostream & stream) const;
+	void print_packs_purchased(std::ofstream & stream) const;
 
 	bool granular_edit(const bool keep_info[], bool edit_mode);
 
@@ -57,8 +59,8 @@ private:
 	size_t nif;
 	unsigned short f_size;
 	Address address;
-	std::vector <Travelpack*> packs_purchased;//Could be a set, to ensure the uniqueness of each travelpack
-	size_t total_purchased;
+	std::vector <Travelpack*> travelpacks_purchased;
+	double total_purchased;
 
 	bool is_valid;
 	std::string error_message;
