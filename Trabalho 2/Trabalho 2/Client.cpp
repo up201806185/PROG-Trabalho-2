@@ -35,6 +35,30 @@ Client::~Client()
 {
 }
 
+bool Client::save(const std::string & path)
+{
+	std::ofstream stream(path);
+	if (stream.fail())
+	{
+		stream.close();
+		return false;
+	}
+
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		if (i != 0)
+		{
+			stream << DELIMITER << std::endl;
+		}
+		Client * ptr;
+		ptr = clients[i];
+		stream << *ptr;
+	}
+
+	stream.close();
+	return true;
+}
+
 bool Client::set_error(std::string error_str)
 {
 	is_valid = false;
@@ -127,4 +151,22 @@ void Client::pprint()
 	std::cout << FANCY_DELIMITER << std::endl;
 	print(std::cout);
 	std::cout << FANCY_DELIMITER << std::endl;
+}
+
+std::ostream & operator<<(std::ostream & stream, const Client & client)
+{
+	client.print(stream);
+	return stream;
+}
+
+std::ofstream & operator<<(std::ofstream & stream, const Client & client)
+{
+	stream << client.name << std::endl;
+	stream << client.nif << std::endl;
+	stream << client.f_size << std::endl;
+	stream << client.address << std::endl;
+	client.print_packs_purchased(stream);
+	stream << client.total_purchased << std::endl;
+
+	return stream;
 }

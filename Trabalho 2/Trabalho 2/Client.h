@@ -10,14 +10,14 @@
 
 class Client
 {
-	friend std::ostream&  operator<<(std::ostream& out, const Client & client);
-	friend std::ofstream& operator<<(std::ofstream& out, const Client & client);
+	friend std::ostream&  operator<<(std::ostream& stream, const Client & client);
+	friend std::ofstream& operator<<(std::ofstream& stream, const Client & client);
 public:
 	Client();
 	~Client();
 
 	static void load(const std::string & path);
-	static void save(const std::string & path);
+	static bool save(const std::string & path);
 
 	static void new_from_console();
 	void        edit();
@@ -34,7 +34,6 @@ public:
 	std::string get_error() const;
 
 private:
-	bool check_coherence();
 	bool set_error(std::string error_str);
 
 	/**Returns true if the parsing went ok and the data is coherent
