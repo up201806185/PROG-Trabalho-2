@@ -21,7 +21,7 @@ public:
 
 	static void new_from_console();
 	void        edit();
-	void        erase();
+	static void erase(Travelpack * ptr);
 
 	std::string              get_name() const;
 	size_t                   get_nif() const;
@@ -52,7 +52,7 @@ private:
 
 	void load_state(const Client & donor);
 
-	static std::vector<Client*> clients;
+	static std::set<Client*> clients;
 
 	std::string name;
 	size_t nif;
