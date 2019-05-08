@@ -10,5 +10,5 @@ int main()
 {
 	Travelpack().load("tp_test.txt");
 	Client().load("client_test.txt");
-	Client().save("client_test2.txt");
+	Client().new_from_console();
 }

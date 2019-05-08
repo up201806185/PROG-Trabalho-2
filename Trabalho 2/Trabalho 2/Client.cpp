@@ -13,7 +13,7 @@ const std::vector<std::string> LABELS =
 "Number of close relatives          : ",
 "Address                            : ",
 "Travelpacks bought                 : ",
-"Maximum number of tickets          : "
+"Total value of travelpacks bought  : "
 };
 
 const std::vector<std::string> EDIT_LABELS =
@@ -23,7 +23,7 @@ const std::vector<std::string> EDIT_LABELS =
 "Number of close relatives          : ",
 "Address                            : ",
 "Packs bought(ex: 1;2;5, 0 if none) : ",
-"Maximum number of tickets          : "
+"Total value of travelpacks bought  : "
 };
 
 inline bool want_to_exit()
@@ -287,6 +287,9 @@ bool Client::parse_packs_purchased(std::istream & stream)
 	
 	travelpacks_purchased.resize(0);
 	is_valid = true;
+
+	if (input == "0")
+		return is_valid;
 	
 	for (size_t id : ids)
 	{
