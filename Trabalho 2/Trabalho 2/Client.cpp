@@ -111,3 +111,20 @@ void Client::print_packs_purchased(std::ofstream & stream) const
 
 	stream << std::endl;
 }
+
+void Client::print(std::ostream & stream) const
+{
+	stream << LABELS[0] << name << std::endl;
+	stream << LABELS[1] << nif  << std::endl;
+	stream << LABELS[2] << f_size << std::endl;
+	stream << LABELS[3] << address << std::endl;
+	stream << LABELS[4]; print_packs_purchased(stream);
+	stream << LABELS[5] << total_purchased << std::endl;
+}
+
+void Client::pprint()
+{
+	std::cout << FANCY_DELIMITER << std::endl;
+	print(std::cout);
+	std::cout << FANCY_DELIMITER << std::endl;
+}
