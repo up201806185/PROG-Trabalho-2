@@ -26,14 +26,14 @@ const std::vector<std::string> EDIT_LABELS =
 "Maximum number of tickets          : "
 };
 
-//bool want_to_exit()
-//{
-//	std::string answer = utils::yes_no_prompt("Do you wish to exit? The changes you made won't be saved(y/n):> ");
-//	if (answer == "NO")
-//		return false;
-//	else
-//		return true;
-//}
+inline bool want_to_exit()
+{
+	std::string answer = utils::yes_no_prompt("Do you wish to exit? The changes you made won't be saved(y/n):> ");
+	if (answer == "NO")
+		return false;
+	else
+		return true;
+}
 
 Client::Client()
 {
@@ -126,6 +126,84 @@ bool Client::save(const std::string & path)
 
 	stream.close();
 	return true;
+}
+
+void Client::new_from_console()
+{
+	Client new_client;
+	const bool CHANGE_EVERYTHING[] = { false, false, false, false, false, false };
+	if (new_client.granular_edit(CHANGE_EVERYTHING, false))
+	{
+		Client * ptr = new Client;
+		*ptr = new_client;
+		clients.insert(ptr);
+	}
+
+	return;
+}
+
+void Client::edit()
+{
+	utils::clear_screen();
+
+	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << "[1]" << LABELS[0] << name << std::endl;
+	std::cout << "[2]" << LABELS[1] << nif << std::endl;
+	std::cout << "[3]" << LABELS[2] << f_size << std::endl;
+	std::cout << "[4]" << LABELS[3] << address << std::endl;
+	std::cout << "[5]" << LABELS[4]; print_packs_purchased(std::cout);
+	std::cout << "[6]" << LABELS[5] << total_purchased << std::endl;
+	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << std::endl << std::endl;
+
+	while (true)
+	{
+		std::cout << "Please enter the numbers of the properties you wish to change (ex: 1,2,4) :> ";
+		std::vector<size_t> choices;
+		std::string input;
+		if (!utils::read_str(std::cin, input))
+		{
+			if (input == "EOF")
+			{
+				std::string answer = utils::yes_no_prompt("Do you wish to exit? (Y/n):> ", "YES");
+				if (answer == "YES")
+					return;
+			}
+			continue;
+		}
+
+		if (!utils::parse_vector_of_nums(choices, input, ','))
+			continue;
+
+		bool out_of_bounds = false;
+		for (size_t i : choices)
+		{
+			if (i == 0 || i >= 7)
+			{
+				out_of_bounds = true;
+				break;
+			}
+		}
+
+		if (out_of_bounds)
+		{
+			utils::print("Error, numbers must be between 1 and 6, please try again");
+			continue;
+		}
+
+		bool what_to_change[] = { true, true, true, true, true, true};
+		for (size_t i : choices)
+		{
+			what_to_change[i - 1] = false;
+		}
+
+		std::cout << "Press Enter to enter editing mode :> ";
+		utils::wait_for_enter();
+
+		granular_edit(what_to_change, true);
+		return;
+
+	}
 }
 
 bool Client::set_error(std::string error_str)
@@ -262,6 +340,202 @@ void Client::print_packs_purchased(std::ofstream & stream) const
 	stream << std::endl;
 }
 
+bool Client::granular_edit(const bool keep_info[], bool edit_mode)
+{
+	utils::clear_screen();
+	Client new_client;
+	new_client.is_valid = true;
+
+	if (edit_mode)
+	{
+		std::cout << "Information of client to be edited:" << std::endl;
+		pprint();
+		std::cout << std::endl << std::endl;
+	}
+
+	utils::print(FANCY_DELIMITER);
+
+	//Client name
+	if (keep_info[0])
+	{
+		std::cout << LABELS[0] << name << std::endl;
+		new_client.name = name;
+	}
+	else
+	{
+		while (true)
+		{
+			std::cout << EDIT_LABELS[0];
+			if (utils::read_str(std::cin, new_client.name))
+				break;
+			if (new_client.name == "EOF")
+			{
+				if (want_to_exit())
+					return false;
+				else
+					continue;
+			}
+		}
+	}
+
+	//NIF
+	if (keep_info[1])
+	{
+		std::cout << LABELS[1] << nif << std::endl;
+		new_client.nif = nif;
+	}
+	else
+	{
+		while (true)
+		{
+			std::cout << EDIT_LABELS[1];
+			if (utils::read_num(std::cin, new_client.nif))
+				break;
+
+			if (new_client.nif == std::numeric_limits<size_t>::max())
+			{
+				if (want_to_exit())
+					return false;
+				else
+					continue;
+			}
+		}
+	}
+
+	//NIF
+	if (keep_info[2])
+	{
+		std::cout << LABELS[2] << f_size << std::endl;
+		new_client.f_size = f_size;
+	}
+	else
+	{
+		while (true)
+		{
+			std::cout << EDIT_LABELS[2];
+			if (utils::read_num(std::cin, new_client.f_size))
+				break;
+
+			if (new_client.f_size == std::numeric_limits<unsigned short int>::max())
+			{
+				if (want_to_exit())
+					return false;
+				else
+					continue;
+			}
+		}
+	}
+
+	//Address
+	if (keep_info[3] == true)
+	{
+		std::cout << LABELS[3] << address << std::endl;
+		new_client.address = address;
+	}
+	else
+	{
+		while (true)
+		{
+			std::cout << EDIT_LABELS[3];
+			if (new_client.address.parse(std::cin))
+				break;
+
+			if (new_client.address.get_error() == "EOF")
+			{
+				if (want_to_exit())
+					return false;
+				else
+					continue;
+			}
+		}
+	}
+
+	//Travelpacks purchased
+	if (keep_info[4] == true)
+	{
+		std::cout << LABELS[4]; print_packs_purchased(std::cout);
+		new_client.travelpacks_purchased = travelpacks_purchased;
+	}
+	else
+	{
+		while (true)
+		{
+			std::cout << EDIT_LABELS[4];
+			if (new_client.parse_packs_purchased(std::cin))
+				break;
+			if (new_client.error_message == "EOF")
+			{
+				if (want_to_exit())
+					return false;
+				else
+					continue;
+			}
+
+			if (new_client.error_message == "Reference error")
+				std::cout << new_client.additional_error_info << std::endl;
+		}
+	}
+
+	//Total money paid
+	if (keep_info[5])
+	{
+		std::cout << LABELS[5] << total_purchased << std::endl;
+		new_client.total_purchased = total_purchased;
+	}
+	else
+	{
+		while (true)
+		{
+			std::cout << EDIT_LABELS[5];
+			if (utils::read_num(std::cin, new_client.total_purchased))
+				break;
+
+			if (new_client.total_purchased == std::numeric_limits<double>::max())
+			{
+				if (want_to_exit())
+					return false;
+				else
+					continue;
+			}
+		}
+	}
+	utils::print(FANCY_DELIMITER);
+
+	//Display "before" travelpack and "after" travelpack
+	utils::clear_screen();
+
+	if (edit_mode)
+	{
+		std::cout << "Client information BEFORE edit:" << std::endl;
+		pprint();
+		std::cout << std::endl;
+
+		std::cout << "Client information AFTER edit:" << std::endl;
+		new_client.pprint();
+		std::cout << std::endl;
+	}
+	else
+	{
+		std::cout << "Client information:" << std::endl;
+		new_client.pprint();
+		std::cout << std::endl;
+	}
+
+	//Do you wish to save?
+	std::string answer = utils::yes_no_prompt("Do you wish to save(Y/n)? :> ", "YES");
+	if (answer == "YES")
+	{
+		load_state(new_client);
+		return true;
+	}
+	else
+	{
+		std::cout << "Please press Enter to exit editing mode:> ";
+		utils::wait_for_enter();
+		return false;
+	}
+}
+
 void Client::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << name << std::endl;
@@ -277,6 +551,19 @@ void Client::pprint()
 	std::cout << FANCY_DELIMITER << std::endl;
 	print(std::cout);
 	std::cout << FANCY_DELIMITER << std::endl;
+}
+
+void Client::load_state(const Client & donor)
+{
+	name                  = donor.name;
+	nif                   = donor.nif;
+	f_size                = donor.f_size;
+	address               = donor.address;
+	travelpacks_purchased = donor.travelpacks_purchased;
+	total_purchased       = donor.total_purchased;
+	is_valid              = donor.is_valid;
+	error_message         = donor.error_message;
+	additional_error_info = donor.additional_error_info;
 }
 
 std::ostream & operator<<(std::ostream & stream, const Client & client)
@@ -295,6 +582,16 @@ std::ofstream & operator<<(std::ofstream & stream, const Client & client)
 	stream << client.total_purchased << std::endl;
 
 	return stream;
+}
+
+void Client::erase(Client * ptr)
+{
+	if (clients.erase(ptr) == 0)
+	{
+		std::cout << "You tried to erase a unexisting client, aborting" << std::endl;
+		exit(1);
+	}
+	delete ptr;
 }
 
 std::string Client::get_name() const

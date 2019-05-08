@@ -21,7 +21,7 @@ public:
 
 	static void new_from_console();
 	void        edit();
-	static void erase(Travelpack * ptr);
+	static void erase(Client * ptr);
 
 	std::string              get_name() const;
 	size_t                   get_nif() const;

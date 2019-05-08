@@ -30,7 +30,7 @@ const std::vector<std::string> EDIT_LABELS =
 "Purchased tickets          : "
 };
 
-bool want_to_exit()
+inline bool want_to_exit()
 {
 	std::string answer = utils::yes_no_prompt("Do you wish to exit? The changes you made won't be saved(y/n):> ");
 	if (answer == "NO")
@@ -445,7 +445,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 
 	if (edit_mode)
 	{
-		std::cout << "Information of travel pack to be edited:" << std::endl;
+		std::cout << "Information of travelpack to be edited:" << std::endl;
 		pprint();
 		std::cout << std::endl << std::endl;
 	}
