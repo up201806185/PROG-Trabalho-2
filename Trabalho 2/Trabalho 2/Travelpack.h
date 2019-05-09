@@ -58,10 +58,11 @@ private:
 	void load_state(const Travelpack & donor);
 
 	static std::vector<Travelpack*> travelpacks;
+
 	static std::multimap<std::string, Travelpack*> destination_to_travelpack_map;
 	void remove_destinations_from_map();
 	void add_destinations_to_map();
-
+	std::vector< std::multimap<std::string, Travelpack*>::iterator> map_iterators;
 
 	bool available;
 	size_t id;

@@ -8,6 +8,7 @@
 const std::string DELIMITER = "::::::::::";
 const std::string FANCY_DELIMITER = std::string(55, '=');
 std::vector<Travelpack*> Travelpack::travelpacks;
+std::multimap<std::string, Travelpack*> Travelpack::destination_to_travelpack_map;
 const std::vector<std::string> LABELS = 
 {
 "ID                         : ",
@@ -76,6 +77,7 @@ void Travelpack::load(const std::string & path)
 			exit(1);
 		}
 
+		temp_tp.add_destinations_to_map();
 		Travelpack * ptr = new Travelpack;
 		*ptr = temp_tp;
 		travelpacks.push_back(ptr);
@@ -112,6 +114,7 @@ void Travelpack::load(const std::string & path)
 		exit(1);
 	}
 
+	temp_tp.add_destinations_to_map();
 	Travelpack * ptr = new Travelpack;
 	*ptr = temp_tp;
 	travelpacks.push_back(ptr);
@@ -169,6 +172,7 @@ void Travelpack::new_from_console()
 	const bool CHANGE_EVERYTHING[] = { false, false, false, false, false, false, false };
 	if (new_tp.granular_edit(CHANGE_EVERYTHING, false))
 	{
+		new_tp.add_destinations_to_map();
 		Travelpack * ptr = new Travelpack;
 		*ptr = new_tp;
 		travelpacks.push_back(ptr);
@@ -240,7 +244,9 @@ void Travelpack::edit()
 		std::cout << "Press Enter to enter editing mode :> ";
 		utils::wait_for_enter();
 
+		remove_destinations_from_map();
 		granular_edit(what_to_change, true);
+		add_destinations_to_map();
 		return;
 
 	}
@@ -812,6 +818,25 @@ void Travelpack::load_state(const Travelpack & donor)
 	bought_tickets     = donor.bought_tickets;
 	is_valid           = donor.is_valid;
 	error_message      = donor.error_message;
+}
+
+void Travelpack::remove_destinations_from_map()
+{
+	for (std::multimap<std::string, Travelpack*>::iterator i : map_iterators)
+	{
+		destination_to_travelpack_map.erase(i);
+	}
+	map_iterators.resize(0);
+}
+
+void Travelpack::add_destinations_to_map()
+{
+	map_iterators.resize(0);
+	for (const std::string & i : destinations)
+	{
+		map_iterators.push_back(destination_to_travelpack_map.insert(std::pair<std::string, Travelpack*>(i, this)));
+	}
+	return;
 }
 
 void Travelpack::print(std::ostream & stream) const
