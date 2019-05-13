@@ -170,6 +170,7 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="agency_test.txt" />
     <Text Include="client_test.txt" />
     <Text Include="client_test2.txt" />
     <Text Include="tp_test.txt" />

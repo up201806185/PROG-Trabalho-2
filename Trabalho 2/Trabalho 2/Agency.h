@@ -6,6 +6,9 @@
 #include "Client.h"
 #include "Travelpack.h"
 
+//For testing
+//Agency agency;
+//agency.load("agency_test.txt");
 class Agency
 {
 	friend std::ostream&  operator<<(std::ostream& stream, const Client & client);
