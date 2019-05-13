@@ -7,7 +7,7 @@
 
 const std::string DELIMITER = "::::::::::";
 const std::string FANCY_DELIMITER = std::string(55, '=');
-std::vector<Travelpack*> Travelpack::travelpacks;
+std::map<size_t, Travelpack*> Travelpack::travelpacks;
 std::multimap<std::string, Travelpack*> Travelpack::destination_to_travelpack_map;
 const std::vector<std::string> LABELS = 
 {
@@ -38,6 +38,19 @@ inline bool want_to_exit()
 		return false;
 	else
 		return true;
+}
+
+size_t get_fresh_id()
+{
+	size_t counter = 1;
+
+	while (true)
+	{
+		if (!Travelpack().id_exists(counter))
+			return counter;
+		else
+			counter++;
+	}
 }
 
 Travelpack::Travelpack()
@@ -80,7 +93,7 @@ void Travelpack::load(const std::string & path)
 		temp_tp.add_destinations_to_map();
 		Travelpack * ptr = new Travelpack;
 		*ptr = temp_tp;
-		travelpacks.push_back(ptr);
+		travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
 		std::string temp;
 		if (!utils::read_str(stream, temp))
@@ -117,7 +130,7 @@ void Travelpack::load(const std::string & path)
 	temp_tp.add_destinations_to_map();
 	Travelpack * ptr = new Travelpack;
 	*ptr = temp_tp;
-	travelpacks.push_back(ptr);
+	travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
 	return;
 }
@@ -150,7 +163,7 @@ bool Travelpack::save(const std::string & path)
 
 bool Travelpack::id_exists(size_t id)
 {
-	return (id != 0 && travelpacks.size() >= id);
+	return (id != 0 && travelpacks.find(id) != travelpacks.end());
 }
 
 Travelpack * Travelpack::get_pointer_from_id(size_t id)
@@ -162,20 +175,20 @@ Travelpack * Travelpack::get_pointer_from_id(size_t id)
 		exit(1);
 	}
 	else
-		return travelpacks[id - 1];
+		return travelpacks[id];
 }
 
 void Travelpack::new_from_console()
 {
 	Travelpack new_tp;
-	new_tp.id = travelpacks.size() + 1;
+	new_tp.id = get_fresh_id();
 	const bool CHANGE_EVERYTHING[] = { false, false, false, false, false, false, false };
 	if (new_tp.granular_edit(CHANGE_EVERYTHING, false))
 	{
 		new_tp.add_destinations_to_map();
 		Travelpack * ptr = new Travelpack;
 		*ptr = new_tp;
-		travelpacks.push_back(ptr);
+		travelpacks.insert(std::pair<size_t, Travelpack *>(new_tp.id, ptr));
 	}
 
 	return;
@@ -350,11 +363,9 @@ bool Travelpack::parse(std::ifstream & stream)
 		id = id_plus_availability;
 	}
 
-	if (id != travelpacks.size() + 1)
+	if (id_exists(id))
 	{
-		return set_error("Incorrect ID: an ID of " + std::to_string(id) + 
-			" was read, but an ID of " + std::to_string(travelpacks.size() + 1) + 
-			" was expected");
+		return set_error("ID already in use: two travelpacks with the same id (" + std::to_string(id) + ") were found");
 	}
 
 	//Destinations
