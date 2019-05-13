@@ -29,11 +29,12 @@ public:
 	bool							is_between_dates(Date start, Date end) const;
 	static void						new_from_console();
 	void							edit();
-	static Travelpack*				select_pack();
+	static std::vector<Travelpack*>	select_pack_vector();
 	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end);
 	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end, const std::vector<Travelpack*> & packs);
 	static std::vector<Travelpack*> fetch_by_destination(std::string dest);
 	static std::vector<Travelpack*> fetch_by_date_and_destination(const Date start, const Date end, std::string dest);
+	static std::vector<Travelpack*> fetch_all();
 	void							mark_as_unavailable();
 
 	size_t                   get_id() const;
