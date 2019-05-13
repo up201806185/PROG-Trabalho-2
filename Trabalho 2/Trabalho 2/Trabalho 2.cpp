@@ -10,8 +10,9 @@ int main()
 {
 	Travelpack().load("tp_test.txt");
 	Client().load("client_test.txt");
-
+	//Travelpack().print_all();
 	std::vector<Travelpack*> vect = Travelpack::fetch_by_destination("Veneza");
+	Travelpack aa = *vect[0];
 	for (size_t i = 0; i < vect.size(); i++) {
 		vect.at(i)->pprint();
 	}

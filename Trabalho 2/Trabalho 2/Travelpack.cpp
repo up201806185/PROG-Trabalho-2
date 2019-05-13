@@ -90,9 +90,10 @@ void Travelpack::load(const std::string & path)
 			exit(1);
 		}
 
-		temp_tp.add_destinations_to_map();
+		
 		Travelpack * ptr = new Travelpack;
 		*ptr = temp_tp;
+		ptr->add_destinations_to_map();
 		travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
 		std::string temp;
@@ -127,9 +128,9 @@ void Travelpack::load(const std::string & path)
 		exit(1);
 	}
 
-	temp_tp.add_destinations_to_map();
 	Travelpack * ptr = new Travelpack;
 	*ptr = temp_tp;
+	ptr->add_destinations_to_map();
 	travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
 	return;
@@ -190,9 +191,9 @@ void Travelpack::new_from_console()
 	const bool CHANGE_EVERYTHING[] = { false, false, false, false, false, false, false };
 	if (new_tp.granular_edit(CHANGE_EVERYTHING, false))
 	{
-		new_tp.add_destinations_to_map();
 		Travelpack * ptr = new Travelpack;
 		*ptr = new_tp;
+		ptr->add_destinations_to_map();
 		travelpacks.insert(std::pair<size_t, Travelpack *>(new_tp.id, ptr));
 	}
 
