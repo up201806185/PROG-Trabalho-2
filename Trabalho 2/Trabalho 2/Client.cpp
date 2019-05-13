@@ -229,7 +229,20 @@ Client * Client::select_client()
 	size_t choice;
 	utils::read_num(std::cin, choice);
 
+	if (choice == std::numeric_limits<size_t>::max())
+		return nullptr;
+
 	return refs.at(choice - 1);
+}
+
+void Client::show_travelpacks()
+{
+	std::cout << FANCY_DELIMITER << std::endl;
+	for (size_t i = 0; i < travelpacks_purchased.size(); i++) {
+		Travelpack temp = *travelpacks_purchased.at(i);
+		std::cout << temp;
+		utils::print(FANCY_DELIMITER);
+	}
 }
 
 bool Client::set_error(std::string error_str)
@@ -575,7 +588,7 @@ void Client::print(std::ostream & stream) const
 	stream << LABELS[5] << total_purchased << std::endl;
 }
 
-void Client::pprint()
+void Client::pprint() const
 {
 	std::cout << FANCY_DELIMITER << std::endl;
 	print(std::cout);

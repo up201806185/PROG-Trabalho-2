@@ -1,3 +1,5 @@
 #pragma once
+#include "Client.h"
 void client_menu();
-void show_all_clients
+void client_submenu(Client* ptr);
+void show_all_clients();

@@ -154,6 +154,7 @@
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="Agency.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="client_menu.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Trabalho 2.cpp" />
     <ClCompile Include="Travelpack.cpp" />

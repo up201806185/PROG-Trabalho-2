@@ -20,9 +20,13 @@ public:
 	static bool save(const std::string & path);
 
 	static void		print_all();
+	void			print(std::ostream & stream) const;
+	void			pprint() const;
+
 	static void		new_from_console();
 	void			edit();
 	static Client*	select_client();
+	void			show_travelpacks();
 	static void		erase(Client * ptr);
 
 	std::string              get_name() const;
@@ -49,8 +53,6 @@ private:
 
 	bool granular_edit(const bool keep_info[], bool edit_mode);
 
-	void print(std::ostream & stream) const;
-	void pprint();
 
 	void load_state(const Client & donor);
 
