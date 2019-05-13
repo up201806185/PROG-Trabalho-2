@@ -3,7 +3,7 @@
 
 
 const std::string DELIMITER = "::::::::::";
-const std::string FANCY_DELIMITER = std::string(55, '=');
+const std::string FANCY_DELIMITER = std::string(85, '=');
 std::set<Client*> Client::clients;
 
 const std::vector<std::string> LABELS =
@@ -204,6 +204,32 @@ void Client::edit()
 		return;
 
 	}
+}
+
+Client * Client::select_client()
+{
+	utils::clear_screen();
+
+	std::vector <Client*> refs;
+
+	std::set<Client*>::iterator it;
+	size_t i = 1;
+
+	for (it = clients.begin(); it != clients.end(); it++) {
+		Client temp = **it;
+		refs.push_back(*it);
+
+		std::cout << "[" << i << "]" << std::endl;
+		temp.pprint();
+		std::cout << std::endl;
+		i++;
+	}
+
+	std::cout << "Please choose a client:>";
+	size_t choice;
+	utils::read_num(std::cin, choice);
+
+	return refs.at(choice - 1);
 }
 
 bool Client::set_error(std::string error_str)
@@ -554,6 +580,23 @@ void Client::pprint()
 	std::cout << FANCY_DELIMITER << std::endl;
 	print(std::cout);
 	std::cout << FANCY_DELIMITER << std::endl;
+}
+
+void Client::print_all()
+{
+	utils::clear_screen();
+
+	std::set<Client*>::iterator it;
+
+	utils::print(FANCY_DELIMITER);
+	for (it = clients.begin(); it != clients.end(); it++) {
+		Client temp = **it;
+		std::cout << temp;
+		utils::print(FANCY_DELIMITER);
+	}
+
+	std::cout << "Press enter to return:> ";
+	utils::wait_for_enter();
 }
 
 void Client::load_state(const Client & donor)

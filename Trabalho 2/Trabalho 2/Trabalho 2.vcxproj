@@ -163,6 +163,7 @@
     <ClInclude Include="Address.h" />
     <ClInclude Include="Agency.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="client_menu.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="Travelpack.h" />
     <ClInclude Include="utils.h" />

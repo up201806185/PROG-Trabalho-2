@@ -19,9 +19,11 @@ public:
 	static void load(const std::string & path);
 	static bool save(const std::string & path);
 
-	static void new_from_console();
-	void        edit();
-	static void erase(Client * ptr);
+	static void		print_all();
+	static void		new_from_console();
+	void			edit();
+	static Client*	select_client();
+	static void		erase(Client * ptr);
 
 	std::string              get_name() const;
 	size_t                   get_nif() const;

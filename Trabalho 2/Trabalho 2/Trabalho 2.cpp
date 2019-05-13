@@ -10,5 +10,7 @@ int main()
 {
 	Travelpack().load("tp_test.txt");
 	Client().load("client_test.txt");
-	Client().new_from_console();
+
+	Client temp = *Client().select_client();
+	temp.edit();
 }
