@@ -16,7 +16,15 @@ Veneza
 24
 ::::::::::
 3
-Douro vinhateiro - Porto, Régua, Pinhão, Vila Real
+Douro vinhateiro - Porto, Regua, Pinhao, Vila Real
+2019/09/21
+2019/09/22
+100
+120
+62
+::::::::::
+5
+Douro vinhateiro - Porto, Regua, Vila Real, Veneza
 2019/09/21
 2019/09/22
 100

@@ -11,6 +11,8 @@ int main()
 	Travelpack().load("tp_test.txt");
 	Client().load("client_test.txt");
 
-	Client temp = *Client().select_client();
-	temp.edit();
+	std::vector<Travelpack*> vect = Travelpack::fetch_by_destination("Veneza");
+	for (size_t i = 0; i < vect.size(); i++) {
+		vect.at(i)->pprint();
+	}
 }

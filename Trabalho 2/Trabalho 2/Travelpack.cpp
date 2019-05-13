@@ -178,6 +178,11 @@ Travelpack * Travelpack::get_pointer_from_id(size_t id)
 		return travelpacks[id];
 }
 
+bool Travelpack::is_between_dates(Date start, Date end) const
+{
+	return (this->begginning >= start) && (this->end <= end);
+}
+
 void Travelpack::new_from_console()
 {
 	Travelpack new_tp;
@@ -263,6 +268,61 @@ void Travelpack::edit()
 		return;
 
 	}
+}
+
+Travelpack * Travelpack::select_pack()
+{
+	///////////////
+	return nullptr;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end)
+{
+	std::vector<Travelpack*> filtered_packs;
+
+	std::map<size_t, Travelpack*>::iterator it;
+
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		Travelpack temp = *it->second;
+		if (temp.is_between_dates(start, end)) filtered_packs.push_back(it->second);
+	}
+
+	return filtered_packs;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end, const std::vector<Travelpack*>& packs)
+{
+	std::vector<Travelpack*> filtered_packs;
+
+	for (Travelpack * i : packs) {
+		Travelpack temp = *i;
+		if(temp.is_between_dates(start, end))
+			filtered_packs.push_back(i);
+	}
+		
+	return filtered_packs;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_destination(std::string dest)
+{
+	dest = utils::uppercase(dest);
+
+	std::vector<Travelpack*> filtered_packs;
+
+	std::pair <std::multimap<std::string, Travelpack*>::iterator, std::multimap<std::string, Travelpack*>::iterator> ret;
+	ret = destination_to_travelpack_map.equal_range(dest);
+
+	for (std::multimap<std::string, Travelpack*>::iterator it = ret.first; it != ret.second; it++) {
+		filtered_packs.push_back(it->second);
+	}
+
+	return filtered_packs;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_date_and_destination(const Date start, const Date end, std::string dest)
+{
+	std::vector<Travelpack*> filtered_packs = fetch_by_destination(dest);
+	return fetch_by_date(start, end, filtered_packs);
 }
 
 void Travelpack::mark_as_unavailable()
@@ -845,9 +905,26 @@ void Travelpack::add_destinations_to_map()
 	map_iterators.resize(0);
 	for (const std::string & i : destinations)
 	{
-		map_iterators.push_back(destination_to_travelpack_map.insert(std::pair<std::string, Travelpack*>(i, this)));
+		map_iterators.push_back(destination_to_travelpack_map.insert(std::pair<std::string, Travelpack*>(utils::uppercase(i), this)));
 	}
 	return;
+}
+
+void Travelpack::print_all()
+{
+	utils::clear_screen();
+
+	std::map<size_t, Travelpack*>::iterator it;
+
+	utils::print(FANCY_DELIMITER);
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		Travelpack temp = *it->second;
+		std::cout << temp;
+		utils::print(FANCY_DELIMITER);
+	}
+
+	std::cout << "Press enter to return:> ";
+	utils::wait_for_enter();
 }
 
 void Travelpack::print(std::ostream & stream) const

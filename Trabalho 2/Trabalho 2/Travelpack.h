@@ -22,9 +22,19 @@ public:
 	static bool id_exists(size_t id);
 	static Travelpack * get_pointer_from_id(size_t id);
 
-	static void new_from_console();
-	void        edit();
-	void        mark_as_unavailable();
+	static void print_all();
+	void print(std::ostream & stream) const;
+	void pprint();
+
+	bool							is_between_dates(Date start, Date end) const;
+	static void						new_from_console();
+	void							edit();
+	static Travelpack*				select_pack();
+	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end);
+	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end, const std::vector<Travelpack*> & packs);
+	static std::vector<Travelpack*> fetch_by_destination(std::string dest);
+	static std::vector<Travelpack*> fetch_by_date_and_destination(const Date start, const Date end, std::string dest);
+	void							mark_as_unavailable();
 
 	size_t                   get_id() const;
 	bool					 get_available() const;
@@ -51,9 +61,6 @@ private:
 	void print_destinations(std::ostream & stream) const;
 
 	bool granular_edit(const bool keep_info[], bool edit_mode);
-
-	void print(std::ostream & stream) const;
-	void pprint();
 
 	void load_state(const Travelpack & donor);
 

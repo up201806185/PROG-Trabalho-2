@@ -227,7 +227,10 @@ Client * Client::select_client()
 
 	std::cout << "Please choose a client:>";
 	size_t choice;
-	utils::read_num(std::cin, choice);
+	if (!utils::read_num(std::cin, choice)) {
+		
+		if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+	}
 
 	if (choice == std::numeric_limits<size_t>::max())
 		return nullptr;
