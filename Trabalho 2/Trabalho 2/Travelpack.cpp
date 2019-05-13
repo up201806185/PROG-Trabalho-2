@@ -270,10 +270,67 @@ void Travelpack::edit()
 	}
 }
 
-Travelpack * Travelpack::select_pack()
+std::vector<Travelpack*> Travelpack::select_pack_vector()
 {
-	///////////////
-	return nullptr;
+	bool date, destination;
+	Date begin, end;
+	std::string input, main_destination;
+	size_t packs_found = 0, index;
+	std::vector<Travelpack*> filtered_packs;
+
+	std::cout << "Do you wish to filter by starting and ending date?(Y/n):> ";
+	utils::read_str(std::cin, input, true);
+	if (input == "N" || input == "n")
+	{
+		date = false;
+	}
+	else
+	{
+		date = true;
+
+		while (true)
+		{
+			std::cout << "Starting date (YYYY/MM/DD):> ";
+			if (begin.parse(std::cin))
+			{
+				break;
+			}
+		}
+
+		while (true)
+		{
+			std::cout << "Ending date (YYYY/MM/DD):> ";
+			if (end.parse(std::cin))
+			{
+				break;
+			}
+		}
+	}
+
+	std::cout << "Do you wish to filter by main destination?(Y/n):> ";
+	utils::read_str(std::cin, input, true);
+	if (input == "N" || input == "n")
+	{
+		destination = false;
+	}
+	else
+	{
+		destination = true;
+
+		while (true)
+		{
+			std::cout << "Main destination:> ";
+			if (utils::read_str(std::cin, main_destination))
+			{
+				break;
+			}
+		}
+	}
+	
+	if (date && destination) return fetch_by_date_and_destination(begin, end, main_destination);
+	if (date) return fetch_by_date(begin, end);
+	if (destination) return fetch_by_destination(main_destination);
+	if (!date && !destination) return fetch_all();
 }
 
 std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end)
@@ -323,6 +380,20 @@ std::vector<Travelpack*> Travelpack::fetch_by_date_and_destination(const Date st
 {
 	std::vector<Travelpack*> filtered_packs = fetch_by_destination(dest);
 	return fetch_by_date(start, end, filtered_packs);
+}
+
+std::vector<Travelpack*> Travelpack::fetch_all()
+{
+	std::vector<Travelpack*> filtered_packs;
+
+	std::map<size_t, Travelpack*>::iterator it;
+
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		Travelpack temp = *it->second;
+		filtered_packs.push_back(it->second);
+	}
+	
+	return filtered_packs;
 }
 
 void Travelpack::mark_as_unavailable()
