@@ -68,5 +68,6 @@
     <Text Include="client_test.txt" />
     <Text Include="tp_test1.txt" />
     <Text Include="client_test2.txt" />
+    <Text Include="agency_test.txt" />
   </ItemGroup>
 </Project>
