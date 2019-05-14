@@ -6,12 +6,22 @@
 #include "Client.h"
 #include "pack_menu.h"
 #include "client_menu.h"
+#include "Agency.h"
+#include "main_menu.h"
 
 using utils::print;
 int main()
 {
-	Travelpack().load("tp_test.txt");
-	Client().load("client_test.txt");
+	Agency agency;
+	std::string agency_path;
 	
-	Travelpack::travelpacks.at(1)->central_pprint();
+	//std::cout << "Please enter the path of the Agency file:> ";
+	//utils::read_str(std::cin, agency_path);
+	agency_path = "agency_test.txt";
+	agency.load(agency_path);
+	main_menu(agency, agency_path);
 }
+
+//ctrlz no main menu crashou o save
+//select travel pack needs refining on coherence checks (dates)
+//criar recommendations function

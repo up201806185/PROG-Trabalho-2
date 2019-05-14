@@ -70,6 +70,9 @@ void client_submenu(Client * ptr)
 
 			std::cout << "Bought Travel Packs" << std::endl;
 			selected_client.show_travelpacks();
+
+			std::cout << "Press enter to return:> ";
+			utils::wait_for_enter();
 		}
 
 		continue;
@@ -108,8 +111,6 @@ void client_menu()
 			std::cout << "All Clients" << std::endl;
 			Client::print_all();
 			std::cout << std::endl;
-			std::cout << "Press enter to return to the clients menu:> ";
-			utils::wait_for_enter();
 		}
 		if (input == "2")
 		{
@@ -130,5 +131,6 @@ void client_menu()
 
 void show_all_clients()
 {
+	utils::print("All Clients");
 	Client::print_all();
 }

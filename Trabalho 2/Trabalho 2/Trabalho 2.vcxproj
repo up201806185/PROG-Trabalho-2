@@ -156,6 +156,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="client_menu.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="main_menu.cpp" />
     <ClCompile Include="pack_menu.cpp" />
     <ClCompile Include="Trabalho 2.cpp" />
     <ClCompile Include="Travelpack.cpp" />
@@ -167,11 +168,13 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="client_menu.h" />
     <ClInclude Include="Date.h" />
+    <ClInclude Include="main_menu.h" />
     <ClInclude Include="pack_menu.h" />
     <ClInclude Include="Travelpack.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="agency_test.txt" />
     <Text Include="client_test.txt" />
     <Text Include="client_test2.txt" />
     <Text Include="tp_test.txt" />

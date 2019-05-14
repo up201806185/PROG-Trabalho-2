@@ -278,6 +278,15 @@ Travelpack * Travelpack::select_pack()
 
 	std::vector <Travelpack*> refs = select_pack_vector();
 
+	utils::clear_screen();
+
+	if (refs.size() == 0) {
+		utils::print("No packs found");
+		std::cout << "Press enter to return:> ";
+		utils::wait_for_enter();
+		return nullptr;
+	}
+
 	for (size_t i = 0; i < refs.size(); i++) {
 		Travelpack temp = *refs.at(i);
 
@@ -995,9 +1004,9 @@ void Travelpack::pprint()
 
 void Travelpack::central_pprint()
 {
-	std::cout << "\t\t\t\t" << FANCY_DELIMITER << std::endl;
+	std::cout << "\t\t" << FANCY_DELIMITER << std::endl;
 	central_print(std::cout);
-	std::cout << "\t\t\t\t" << FANCY_DELIMITER << std::endl;
+	std::cout << "\t\t" << FANCY_DELIMITER << std::endl;
 }
 
 void Travelpack::load_state(const Travelpack & donor)
@@ -1035,8 +1044,6 @@ void Travelpack::add_destinations_to_map()
 
 void Travelpack::print_all()
 {
-	utils::clear_screen();
-
 	std::map<size_t, Travelpack*>::iterator it;
 
 	utils::print(FANCY_DELIMITER);
@@ -1045,18 +1052,15 @@ void Travelpack::print_all()
 		std::cout << temp;
 		utils::print(FANCY_DELIMITER);
 	}
-
-	std::cout << "Press enter to return:> ";
-	utils::wait_for_enter();
 }
 
 void Travelpack::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("Travelpack                   :is available", stream);
+		utils::print("Travelpack                 : is available", stream);
 	else
-		utils::print("Travelpack                   :is not available", stream);
+		utils::print("Travelpack                 : is not available", stream);
 	stream << LABELS[1]; print_destinations(stream);
 	stream << LABELS[2] << begginning << std::endl;
 	stream << LABELS[3] << end << std::endl;
@@ -1067,17 +1071,17 @@ void Travelpack::print(std::ostream & stream) const
 
 void Travelpack::central_print(std::ostream & stream) const
 {
-	stream << "\t\t\t\t\t" << LABELS[0] << id << std::endl;
+	stream << "\t\t\t" << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("\t\t\t\t\tTravelpack                   :is available", stream);
+		utils::print("\t\t\tTravelpack                 : is available", stream);
 	else
-		utils::print("\t\t\t\t\tTravelpack                   :is not available", stream);
-	stream << "\t\t\t\t\t" << LABELS[1]; print_destinations(stream);
-	stream << "\t\t\t\t\t" << LABELS[2] << begginning << std::endl;
-	stream << "\t\t\t\t\t" << LABELS[3] << end << std::endl;
-	stream << "\t\t\t\t\t" << LABELS[4] << price_per_person << std::endl;
-	stream << "\t\t\t\t\t" << LABELS[5] << max_bought_tickets << std::endl;
-	stream << "\t\t\t\t\t" << LABELS[6] << bought_tickets << std::endl;
+		utils::print("\t\t\tTravelpack                 : is not available", stream);
+	stream << "\t\t\t" << LABELS[1]; print_destinations(stream);
+	stream << "\t\t\t" << LABELS[2] << begginning << std::endl;
+	stream << "\t\t\t" << LABELS[3] << end << std::endl;
+	stream << "\t\t\t" << LABELS[4] << price_per_person << std::endl;
+	stream << "\t\t\t" << LABELS[5] << max_bought_tickets << std::endl;
+	stream << "\t\t\t" << LABELS[6] << bought_tickets << std::endl;
 }
 
 std::ostream & operator<<(std::ostream & stream, const Travelpack & travelpack)

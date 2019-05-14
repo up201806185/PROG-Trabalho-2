@@ -42,6 +42,9 @@
     <ClCompile Include="pack_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
@@ -68,11 +71,17 @@
     <ClInclude Include="pack_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="main_menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="tp_test.txt" />
     <Text Include="client_test.txt" />
     <Text Include="tp_test1.txt" />
     <Text Include="client_test2.txt" />
+    <Text Include="agency_test.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -88,8 +88,12 @@ void pack_submenu(Travelpack *ptr)
 void show_all_packs()
 {
 	utils::clear_screen();
-	
+	utils::print("All Travel Packs");
+
 	Travelpack::print_all();
+
+	std::cout << "Press enter to return:> ";
+	utils::wait_for_enter();
 }
 
 void show_profits()
@@ -111,7 +115,10 @@ void show_profits()
 	}
 	std::cout << "\nIn total:" << std::endl;
 	std::cout << total_sales << " packs sold" << std::endl;
-	std::cout << total_profit << "$ of profit" << std::endl;
+	std::cout << total_profit << "$ of profit" << std::endl << std::endl;
+
+	std::cout << "Press enter to return:> ";
+	utils::wait_for_enter();
 }
 
 void show_n_most_visited()
@@ -144,24 +151,34 @@ void show_n_most_visited()
 
 	for (it = Travelpack::destination_visits_vector.rbegin(); it != Travelpack::destination_visits_vector.rend(); it++) {
 		if (i == input) break;
-		std::cout << "[" << i + 1 << "]: " << it->first << std::endl;
+		std::cout << "[" << i + 1 << "]: " << it->first << std::endl << std::endl;
 		i++;
 	}
+	
+	std::cout << "Press enter to return:> ";
+	utils::wait_for_enter();
 }
 
 void show_sold_packs()
 {
+	utils::clear_screen();
+	
 	std::map<size_t, Travelpack*>::iterator it;
 
-	for (it = Travelpack::travelpacks.begin(); it != Travelpack::travelpacks.end(); it++) {
+	for (it = Travelpack::travelpacks.begin(); it != Travelpack::travelpacks.end(); ++it) {
 		Travelpack temp_p = *it->second;
 		temp_p.central_pprint();
 
 		std::set<Client*>::iterator jt;
-		for (jt = Client::clients.begin(); jt != Client::clients.end(); jt++) {
+		for (jt = Client::clients.begin(); jt != Client::clients.end(); ++jt) {
 			Client temp_c = **jt;
-			temp_c.pprint();
+			std::vector<Travelpack*> temp_packs = temp_c.get_packs();
+			//if (std::find(temp_packs.begin(), temp_packs.end(), *it) != temp_packs.end())
+			{
+				temp_c.pprint();
+			}
 		}
+		std::cout << std::endl << std::endl;
 	}
 
 	std::cout << "Press enter to return:> ";
