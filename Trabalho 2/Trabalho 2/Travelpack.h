@@ -24,17 +24,25 @@ public:
 
 	static void print_all();
 	void print(std::ostream & stream) const;
+	void central_print(std::ostream & stream) const;
 	void pprint();
+	void central_pprint();
 
 	bool							is_between_dates(Date start, Date end) const;
 	static void						new_from_console();
 	void							edit();
+	static Travelpack *				select_pack();
 	static std::vector<Travelpack*>	select_pack_vector();
+
+	static std::vector< std::pair<std::string, double>> destination_visits_vector;
+	static void get_destination_visits_vector();
+
 	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end);
 	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end, const std::vector<Travelpack*> & packs);
 	static std::vector<Travelpack*> fetch_by_destination(std::string dest);
 	static std::vector<Travelpack*> fetch_by_date_and_destination(const Date start, const Date end, std::string dest);
 	static std::vector<Travelpack*> fetch_all();
+
 	void							mark_as_unavailable();
 
 	size_t                   get_id() const;
@@ -50,6 +58,11 @@ public:
 	std::string get_error() const;
 
 	bool purchase_n_tickets(unsigned short n_tickets);
+
+
+	static std::map<size_t, Travelpack*> travelpacks;
+
+
 private:
 	bool check_coherence();
 	bool set_error(std::string error_str);
@@ -64,8 +77,6 @@ private:
 	bool granular_edit(const bool keep_info[], bool edit_mode);
 
 	void load_state(const Travelpack & donor);
-
-	static std::map<size_t, Travelpack*> travelpacks;
 
 	static std::multimap<std::string, Travelpack*> destination_to_travelpack_map;
 	void remove_destinations_from_map();

@@ -232,9 +232,6 @@ Client * Client::select_client()
 		if (choice == std::numeric_limits<size_t>::max()) return nullptr;
 	}
 
-	if (choice == std::numeric_limits<size_t>::max())
-		return nullptr;
-
 	return refs.at(choice - 1);
 }
 

@@ -39,6 +39,8 @@ public:
 	bool valid() const;
 	std::string get_error() const;
 
+	static std::set<Client*> clients;
+
 private:
 	bool set_error(std::string error_str);
 
@@ -55,8 +57,6 @@ private:
 
 
 	void load_state(const Client & donor);
-
-	static std::set<Client*> clients;
 
 	std::string name;
 	size_t nif;

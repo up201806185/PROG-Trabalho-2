@@ -177,3 +177,4 @@ size_t char_count(const std::string & input, const char delim)
 
 	return count;
 }
+

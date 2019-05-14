@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <map>
+#include <algorithm>
 
 namespace utils
 {
@@ -115,6 +117,7 @@ namespace utils
 	Naturally, if this second argument (must be either "YES" or "NO") is used, the function won't indefinitely repeat
 	*/
 	std::string yes_no_prompt(std::string prompt, std::string default_answer = "");
+
 }
 
 template <class T>

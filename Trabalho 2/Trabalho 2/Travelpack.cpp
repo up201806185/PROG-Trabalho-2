@@ -9,6 +9,7 @@ const std::string DELIMITER = "::::::::::";
 const std::string FANCY_DELIMITER = std::string(55, '=');
 std::map<size_t, Travelpack*> Travelpack::travelpacks;
 std::multimap<std::string, Travelpack*> Travelpack::destination_to_travelpack_map;
+std::vector< std::pair<std::string, double>> Travelpack::destination_visits_vector;
 const std::vector<std::string> LABELS = 
 {
 "ID                         : ",
@@ -271,12 +272,36 @@ void Travelpack::edit()
 	}
 }
 
+Travelpack * Travelpack::select_pack()
+{
+	utils::clear_screen();
+
+	std::vector <Travelpack*> refs = select_pack_vector();
+
+	for (size_t i = 0; i < refs.size(); i++) {
+		Travelpack temp = *refs.at(i);
+
+		std::cout << "[" << i + 1 << "]" << std::endl;
+		temp.pprint();
+		std::cout << std::endl;
+	}
+
+	std::cout << "Please choose a travel pack:>";
+	size_t choice;
+	if (!utils::read_num(std::cin, choice)) {
+
+		if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+	}
+
+	return refs.at(choice - 1);
+}
+
 std::vector<Travelpack*> Travelpack::select_pack_vector()
 {
 	bool date, destination;
 	Date begin, end;
 	std::string input, main_destination;
-	size_t packs_found = 0, index;
+	size_t packs_found = 0;
 	std::vector<Travelpack*> filtered_packs;
 
 	std::cout << "Do you wish to filter by starting and ending date?(Y/n):> ";
@@ -332,6 +357,25 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 	if (date) return fetch_by_date(begin, end);
 	if (destination) return fetch_by_destination(main_destination);
 	if (!date && !destination) return fetch_all();
+}
+
+void Travelpack::get_destination_visits_vector()
+{
+	std::map<size_t, Travelpack*>::iterator i;
+
+	for (i = travelpacks.begin(); i != travelpacks.end(); i++) {
+		Travelpack temp = *i->second;
+		std::vector <std::string> dests = temp.destinations;
+		
+		for (size_t j = 0; j < dests.size(); j++) {
+			auto it = std::find_if(destination_visits_vector.begin(), destination_visits_vector.end(), [&dests, &j](const std::pair<std::string, double>& element) { return element.first == dests.at(j); });
+
+			if (it != destination_visits_vector.end()) it->second += temp.bought_tickets; //if destination is already in vector, add this packs' bought tickets
+
+			else destination_visits_vector.push_back(std::pair<std::string, double> (dests.at(j), temp.bought_tickets)); //create entry in vector for this destination
+		}
+	}
+
 }
 
 std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end)
@@ -949,6 +993,13 @@ void Travelpack::pprint()
 	std::cout << FANCY_DELIMITER << std::endl;
 }
 
+void Travelpack::central_pprint()
+{
+	std::cout << "\t\t\t\t" << FANCY_DELIMITER << std::endl;
+	central_print(std::cout);
+	std::cout << "\t\t\t\t" << FANCY_DELIMITER << std::endl;
+}
+
 void Travelpack::load_state(const Travelpack & donor)
 {
 	id                 = donor.id;
@@ -1003,15 +1054,30 @@ void Travelpack::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("Travelpack                   is available", stream);
+		utils::print("Travelpack                   :is available", stream);
 	else
-		utils::print("Travelpack                   is not available", stream);
+		utils::print("Travelpack                   :is not available", stream);
 	stream << LABELS[1]; print_destinations(stream);
 	stream << LABELS[2] << begginning << std::endl;
 	stream << LABELS[3] << end << std::endl;
 	stream << LABELS[4] << price_per_person << std::endl;
 	stream << LABELS[5] << max_bought_tickets << std::endl;
 	stream << LABELS[6] << bought_tickets << std::endl;
+}
+
+void Travelpack::central_print(std::ostream & stream) const
+{
+	stream << "\t\t\t\t\t" << LABELS[0] << id << std::endl;
+	if (available)
+		utils::print("\t\t\t\t\tTravelpack                   :is available", stream);
+	else
+		utils::print("\t\t\t\t\tTravelpack                   :is not available", stream);
+	stream << "\t\t\t\t\t" << LABELS[1]; print_destinations(stream);
+	stream << "\t\t\t\t\t" << LABELS[2] << begginning << std::endl;
+	stream << "\t\t\t\t\t" << LABELS[3] << end << std::endl;
+	stream << "\t\t\t\t\t" << LABELS[4] << price_per_person << std::endl;
+	stream << "\t\t\t\t\t" << LABELS[5] << max_bought_tickets << std::endl;
+	stream << "\t\t\t\t\t" << LABELS[6] << bought_tickets << std::endl;
 }
 
 std::ostream & operator<<(std::ostream & stream, const Travelpack & travelpack)
