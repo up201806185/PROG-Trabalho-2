@@ -158,8 +158,8 @@ void show_sold_packs()
 		std::set<Client*>::iterator jt;
 		for (jt = Client::clients.begin(); jt != Client::clients.end(); ++jt) {
 			Client temp_c = **jt;
-			std::vector<Travelpack*> temp_packs = temp_c.get_packs();
-			//if (std::find(temp_packs.begin(), temp_packs.end(), *it) != temp_packs.end())
+			std::vector<Travelpack*> temp_c_packs = temp_c.get_packs();
+			if (std::find(temp_c_packs.begin(), temp_c_packs.end(), it->second) != temp_c_packs.end())
 			{
 				temp_c.pprint();
 			}

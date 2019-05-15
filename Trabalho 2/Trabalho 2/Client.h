@@ -18,8 +18,6 @@ public:
 	Client();
 	~Client();
 
-	friend void		push_new_pack(Client *& client, Travelpack* pack);
-
 	static void		load(const std::string & path);
 	static bool		save(const std::string & path);
 
@@ -34,6 +32,8 @@ public:
 	static Client*	select_client();
 	void			show_travelpacks();
 	static void		erase(Client * ptr);
+
+	void			push_new_pack(Travelpack* pack);
 
 	std::string              get_name() const;
 	size_t                   get_nif() const;

@@ -677,11 +677,6 @@ std::ofstream & operator<<(std::ofstream & stream, const Client & client)
 	return stream;
 }
 
-void push_new_pack(Client *& client, Travelpack * pack)
-{
-	client.travelpacks_purchased.push_back(pack);
-}
-
 void Client::erase(Client * ptr)
 {
 	if (clients.erase(ptr) == 0)
@@ -690,6 +685,11 @@ void Client::erase(Client * ptr)
 		exit(1);
 	}
 	delete ptr;
+}
+
+void Client::push_new_pack(Travelpack * pack)
+{
+	travelpacks_purchased.push_back(pack);
 }
 
 std::string Client::get_name() const

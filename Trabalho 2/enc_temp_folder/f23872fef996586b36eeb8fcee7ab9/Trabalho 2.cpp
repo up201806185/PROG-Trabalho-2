@@ -22,5 +22,7 @@ int main()
 	main_menu(agency, agency_path);
 }
 
+//ctrlz no main menu crashou o save
 /////////select travel pack needs refining on coherence checks (dates)
 ///////////////fix show all sold packs aesthetic
+//show sold packs needs fixing to find correct client association to packs

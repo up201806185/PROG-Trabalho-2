@@ -164,7 +164,7 @@ void make_purchase(Client* selected_client)
 		utils::print("Pack is not available, cancelling purchase");
 	}
 	else {
-		push_new_pack(selected_client, Travelpack::get_pointer_from_id(selected_pack.get_id()));
+		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack.get_id()));
 		utils::print("Purchase successful");
 	}
 
