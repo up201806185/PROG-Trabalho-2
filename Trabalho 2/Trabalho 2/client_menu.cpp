@@ -165,6 +165,7 @@ void make_purchase(Client* selected_client)
 	}
 	else {
 		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack.get_id()));
+		selected_client->update_total_purchased(selected_pack.get_price_per_person());
 		utils::print("Purchase successful");
 	}
 

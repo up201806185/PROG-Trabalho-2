@@ -540,8 +540,14 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 		while (true)
 		{
 			std::cout << EDIT_LABELS[5];
-			if (utils::read_num(std::cin, new_client.total_purchased))
+			if (utils::read_num(std::cin, total_purchased)) {
+				new_client.total_purchased = total_purchased;
+				auto new_client_packs = new_client.get_packs();
+				for (size_t i = 0; i < new_client_packs.size(); i++) {
+					new_client.total_purchased += new_client_packs.at(i)->get_price_per_person();
+				}
 				break;
+			}
 
 			if (new_client.total_purchased == std::numeric_limits<double>::max())
 			{
@@ -690,6 +696,11 @@ void Client::erase(Client * ptr)
 void Client::push_new_pack(Travelpack * pack)
 {
 	travelpacks_purchased.push_back(pack);
+}
+
+void Client::update_total_purchased(double new_value)
+{
+	total_purchased += new_value * f_size;
 }
 
 std::string Client::get_name() const

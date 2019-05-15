@@ -34,6 +34,7 @@ public:
 	static void		erase(Client * ptr);
 
 	void			push_new_pack(Travelpack* pack);
+	void			update_total_purchased(double new_value);
 
 	std::string              get_name() const;
 	size_t                   get_nif() const;

@@ -24,3 +24,4 @@ int main()
 
 /////////select travel pack needs refining on coherence checks (dates)
 ///////////////fix show all sold packs aesthetic
+//client creation details
