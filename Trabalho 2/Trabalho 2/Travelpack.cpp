@@ -149,15 +149,14 @@ bool Travelpack::save(const std::string & path)
 
 	utils::print(travelpacks.size(), stream);
 
-	for (size_t i = 0; i < travelpacks.size(); i++)
-	{
-		if (i != 0)
-		{
-			stream << DELIMITER << std::endl;
-		}
-		Travelpack * ptr;
-		ptr = travelpacks[i];
-		stream << *ptr;
+	std::map<size_t, Travelpack*>::iterator it;
+
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		if (it != travelpacks.begin())
+			utils::print(DELIMITER, stream);
+
+		Travelpack temp = *it->second;
+		stream << temp;
 	}
 
 	stream.close();
