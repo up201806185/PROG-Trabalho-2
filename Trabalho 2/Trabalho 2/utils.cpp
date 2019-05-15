@@ -41,6 +41,18 @@ bool utils::read_str(std::istream & stream, std::string & input, bool read_only_
 	}
 }
 
+bool utils::read_num(const std::string & str, size_t & input)
+{
+	if (str[0] == '-')
+		return false;
+
+	std::istringstream temp_stream(str);
+
+	temp_stream >> input;
+
+	return (!temp_stream.fail());
+}
+
 void utils::wait_for_enter()
 {
 	std::string temp;

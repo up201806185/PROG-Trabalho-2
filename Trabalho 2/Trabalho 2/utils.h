@@ -44,6 +44,16 @@ namespace utils
 	bool read_num(const std::string & str, T & input);
 
 	/**
+	Assigns the first integer it finds in 'str' to 'input'
+	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
+	an EOF happened while reading the 'str'
+	Helpful tip: use this function from <limits> to get the maximum possible integer
+	std::numeric_limits<your_datatype>::max()
+	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
+	*/
+	bool read_num(const std::string & str, size_t & input);
+
+	/**
 	Waits for the Enter key to be pressed
 	*/
 	void wait_for_enter();
