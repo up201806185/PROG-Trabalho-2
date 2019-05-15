@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <iomanip>
+#include <iostream>
 #include "Travelpack.h"
 #include "Address.h"
 
@@ -16,12 +18,16 @@ public:
 	Client();
 	~Client();
 
-	static void load(const std::string & path);
-	static bool save(const std::string & path);
+	friend void		push_new_pack(Client *& client, Travelpack* pack);
+
+	static void		load(const std::string & path);
+	static bool		save(const std::string & path);
 
 	static void		print_all();
 	void			print(std::ostream & stream) const;
 	void			pprint() const;
+	void			side_by_side_print(Travelpack* pack, std::ostream & stream = std::cout) const;
+	void			no_recommendation_print(std::ostream & stream = std::cout) const;
 
 	static void		new_from_console();
 	void			edit();

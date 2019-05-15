@@ -125,32 +125,16 @@ void show_n_most_visited()
 {
 	utils::clear_screen();
 
-	Travelpack::get_destination_visits_vector();
-
-	utils::print("What is the length (N) of the list? (Type 0 or CTRL + Z to exit)");
-	std::size_t input;
-
-	if (!utils::read_num(std::cin, input))
-	{
-		if (input == std::numeric_limits<size_t>::max())
-		{
-			return;
-		}
-	}
-	
-	if (input == 0) return;
-
-	if (input > Travelpack::destination_visits_vector.size()) input = Travelpack::destination_visits_vector.size();
+	std::vector<std::pair<std::string, long>> places = Travelpack::get_n_most_visited_vector();
 
 	utils::clear_screen();
 
 	utils::print("Most visited places");
 
 	size_t i = 0;
-	std::vector<std::pair<std::string, double>>::reverse_iterator it;
+	std::vector<std::pair<std::string, long>>::reverse_iterator it;
 
-	for (it = Travelpack::destination_visits_vector.rbegin(); it != Travelpack::destination_visits_vector.rend(); it++) {
-		if (i == input) break;
+	for (it = places.rbegin(); it != places.rend(); it++) {
 		std::cout << "[" << i + 1 << "]: " << it->first << std::endl << std::endl;
 		i++;
 	}
@@ -163,6 +147,8 @@ void show_sold_packs()
 {
 	utils::clear_screen();
 	
+	utils::print("All sold packs' clients");
+
 	std::map<size_t, Travelpack*>::iterator it;
 
 	for (it = Travelpack::travelpacks.begin(); it != Travelpack::travelpacks.end(); ++it) {
@@ -178,9 +164,8 @@ void show_sold_packs()
 				temp_c.pprint();
 			}
 		}
-		std::cout << std::endl << std::endl;
 	}
 
-	std::cout << "Press enter to return:> ";
+	std::cout << "\nPress enter to return:> ";
 	utils::wait_for_enter();
 }

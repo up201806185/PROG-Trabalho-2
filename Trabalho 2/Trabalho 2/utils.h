@@ -128,6 +128,7 @@ namespace utils
 	*/
 	std::string yes_no_prompt(std::string prompt, std::string default_answer = "");
 
+	bool sortbysec(const std::pair<std::string, long> &a, const std::pair<std::string, long> &b);
 }
 
 template <class T>

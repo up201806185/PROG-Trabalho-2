@@ -24,4 +24,4 @@ int main()
 
 //ctrlz no main menu crashou o save
 //select travel pack needs refining on coherence checks (dates)
-//criar recommendations function
+//fix show all sold packs aesthetic

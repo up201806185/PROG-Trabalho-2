@@ -9,7 +9,7 @@ const std::string DELIMITER = "::::::::::";
 const std::string FANCY_DELIMITER = std::string(55, '=');
 std::map<size_t, Travelpack*> Travelpack::travelpacks;
 std::multimap<std::string, Travelpack*> Travelpack::destination_to_travelpack_map;
-std::vector< std::pair<std::string, double>> Travelpack::destination_visits_vector;
+std::vector< std::pair<std::string, long>> Travelpack::destination_visits_vector;
 const std::vector<std::string> LABELS = 
 {
 "ID                         : ",
@@ -134,6 +134,7 @@ void Travelpack::load(const std::string & path)
 	ptr->add_destinations_to_map();
 	travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
+	stream.close();
 	return;
 }
 
@@ -381,10 +382,43 @@ void Travelpack::get_destination_visits_vector()
 
 			if (it != destination_visits_vector.end()) it->second += temp.bought_tickets; //if destination is already in vector, add this packs' bought tickets
 
-			else destination_visits_vector.push_back(std::pair<std::string, double> (dests.at(j), temp.bought_tickets)); //create entry in vector for this destination
+			else destination_visits_vector.push_back(std::pair<std::string, long> (dests.at(j), temp.bought_tickets)); //create entry in vector for this destination
 		}
 	}
+	sort(destination_visits_vector.begin(), destination_visits_vector.end(), utils::sortbysec);
+}
 
+std::vector<std::pair<std::string, long>> Travelpack::get_n_most_visited_vector()
+{
+	get_destination_visits_vector();
+
+	std::vector<std::pair<std::string, long>> result;
+	
+	utils::print("What is the length (N) of the list? (Type 0 or CTRL + Z to exit)");
+	std::size_t input;
+	while (true)
+	{
+		if (!utils::read_num(std::cin, input))
+		{
+			if (input == std::numeric_limits<size_t>::max())
+			{
+				return {};
+			}
+			else
+				continue;
+		}
+		else
+			break;
+	}
+
+	if (input == 0) return {};
+
+	if (input > Travelpack::destination_visits_vector.size()) input = Travelpack::destination_visits_vector.size();
+
+	result = destination_visits_vector;
+	result.resize(input);
+
+	return result;
 }
 
 std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end)

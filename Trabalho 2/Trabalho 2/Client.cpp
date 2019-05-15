@@ -3,7 +3,7 @@
 
 
 const std::string DELIMITER = "::::::::::";
-const std::string FANCY_DELIMITER = std::string(85, '=');
+const std::string FANCY_DELIMITER = std::string(90, '=');
 std::set<Client*> Client::clients;
 
 const std::vector<std::string> LABELS =
@@ -24,6 +24,16 @@ const std::vector<std::string> EDIT_LABELS =
 "Address                            : ",
 "Packs bought(ex: 1;2;5, 0 if none) : ",
 "Total value of travelpacks bought  : "
+};
+
+const std::vector<std::string> PACK_LABELS =
+{
+"ID                         : ",
+"Destinations               : ",
+"Begginning - Ending date   : ",
+"Price(per person)          : ",
+"Maximum number of tickets  : ",
+"Purchased tickets          : "
 };
 
 inline bool want_to_exit()
@@ -354,14 +364,15 @@ bool Client::parse_packs_purchased(std::istream & stream)
 
 void Client::print_packs_purchased(std::ostream & stream) const
 {
+	std::string p = "";
 	for (size_t i = 0; i < travelpacks_purchased.size(); i++)
 	{
 		if (i != 0)
-			stream << "; ";
+			p += "; ";
 
-		stream << travelpacks_purchased[i]->get_id();
+		p += std::to_string(travelpacks_purchased[i]->get_id());
 	}
-	stream << std::endl;
+	stream << std::left << std::setw(55) << p;
 }
 
 void Client::print_packs_purchased(std::ofstream & stream) const
@@ -584,7 +595,7 @@ void Client::print(std::ostream & stream) const
 	stream << LABELS[1] << nif  << std::endl;
 	stream << LABELS[2] << f_size << std::endl;
 	stream << LABELS[3] << address << std::endl;
-	stream << LABELS[4]; print_packs_purchased(stream);
+	stream << LABELS[4]; print_packs_purchased(stream); stream << std::endl;
 	stream << LABELS[5] << total_purchased << std::endl;
 }
 
@@ -595,10 +606,33 @@ void Client::pprint() const
 	std::cout << FANCY_DELIMITER << std::endl;
 }
 
+void Client::side_by_side_print(Travelpack* p, std::ostream & stream) const
+{
+	Travelpack pack = *p;
+	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
+	stream << LABELS[0] << std::left << std::setw(55) << name << PACK_LABELS[0] << pack.get_id() << std::endl;
+	stream << LABELS[1] << std::left << std::setw(55) << nif << PACK_LABELS[1]; pack.print_destinations(stream);
+	stream << LABELS[2] << std::left << std::setw(55) << f_size << PACK_LABELS[2] << pack.get_begginning() << " - " << pack.get_end() << std::endl;
+	stream << LABELS[3] << std::left << std::setw(55) << address << PACK_LABELS[3] << pack.get_price_per_person() << std::endl;
+	stream << LABELS[4]; print_packs_purchased(stream); stream << PACK_LABELS[4] << pack.get_max_bought_tickets() << std::endl;
+	stream << LABELS[5] << std::left << std::setw(55) << total_purchased << PACK_LABELS[5] << pack.get_bought_tickets() << std::endl;
+	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
+}
+
+void Client::no_recommendation_print(std::ostream & stream) const
+{
+	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
+	stream << LABELS[0] << name << std::endl;
+	stream << LABELS[1] << nif << std::endl;
+	stream << LABELS[2] << std::left << std::setw(85) << f_size << "No recommendation found" << std::endl;
+	stream << LABELS[3] << address << std::endl;
+	stream << LABELS[4]; print_packs_purchased(stream); stream << std::endl;
+	stream << LABELS[5] << total_purchased << std::endl;
+	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
+}
+
 void Client::print_all()
 {
-	utils::clear_screen();
-
 	std::set<Client*>::iterator it;
 
 	utils::print(FANCY_DELIMITER);
@@ -641,6 +675,11 @@ std::ofstream & operator<<(std::ofstream & stream, const Client & client)
 	stream << client.total_purchased << std::endl;
 
 	return stream;
+}
+
+void push_new_pack(Client *& client, Travelpack * pack)
+{
+	client.travelpacks_purchased.push_back(pack);
 }
 
 void Client::erase(Client * ptr)

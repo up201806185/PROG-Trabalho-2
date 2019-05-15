@@ -22,6 +22,7 @@ public:
 	static bool id_exists(size_t id);
 	static Travelpack * get_pointer_from_id(size_t id);
 
+	void print_destinations(std::ostream & stream) const;
 	static void print_all();
 	void print(std::ostream & stream) const;
 	void central_print(std::ostream & stream) const;
@@ -34,8 +35,10 @@ public:
 	static Travelpack *				select_pack();
 	static std::vector<Travelpack*>	select_pack_vector();
 
-	static std::vector< std::pair<std::string, double>> destination_visits_vector;
+	static std::multimap<std::string, Travelpack*> destination_to_travelpack_map;
+	static std::vector< std::pair<std::string, long>> destination_visits_vector;
 	static void get_destination_visits_vector();
+	static std::vector<std::pair<std::string, long>> get_n_most_visited_vector();
 
 	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end);
 	static std::vector<Travelpack*> fetch_by_date(const Date start, const Date end, const std::vector<Travelpack*> & packs);
@@ -43,16 +46,16 @@ public:
 	static std::vector<Travelpack*> fetch_by_date_and_destination(const Date start, const Date end, std::string dest);
 	static std::vector<Travelpack*> fetch_all();
 
-	void							mark_as_unavailable();
+	void						mark_as_unavailable();
 
-	size_t                   get_id() const;
-	bool					 get_available() const;
-	std::vector<std::string> get_destinations() const;
-	Date                     get_begginning() const;
-	Date                     get_end() const;
-	double                   get_price_per_person() const;
-	size_t                   get_max_bought_tickets() const;
-	size_t                   get_bought_tickets() const;
+	size_t						get_id() const;
+	bool						get_available() const;
+	std::vector<std::string>	get_destinations() const;
+	Date						get_begginning() const;
+	Date						get_end() const;
+	double						get_price_per_person() const;
+	size_t						get_max_bought_tickets() const;
+	size_t						get_bought_tickets() const;
 	
 	bool valid() const;
 	std::string get_error() const;
@@ -72,13 +75,11 @@ private:
 	bool parse(std::ifstream & stream);
 
 	bool parse_destinations(std::istream & stream);
-	void print_destinations(std::ostream & stream) const;
 
 	bool granular_edit(const bool keep_info[], bool edit_mode);
 
 	void load_state(const Travelpack & donor);
 
-	static std::multimap<std::string, Travelpack*> destination_to_travelpack_map;
 	void remove_destinations_from_map();
 	void add_destinations_to_map();
 	std::vector< std::multimap<std::string, Travelpack*>::iterator> map_iterators;
