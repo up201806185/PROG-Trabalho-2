@@ -12,8 +12,8 @@ const std::vector<std::string> LABELS =
 "NIF                                 : ",
 "Number of close relatives           : ",
 "Address (Str / No / Flr / Pst / Loc): ",
-"Travelpacks bought                  : ",
-"Total value of travelpacks bought   : "
+"Packs bought (ex: 1;2;5, 0 if none) : ",
+"Value of travelpacks bought in past : "
 };
 
 const std::vector<std::string> EDIT_LABELS =
@@ -22,8 +22,8 @@ const std::vector<std::string> EDIT_LABELS =
 "NIF                                 : ",
 "Number of close relatives           : ",
 "Address (Str / No / Flr / Pst / Loc): ",
-"Packs bought(ex: 1;2;5, 0 if none)  : ",
-"Total value of travelpacks bought   : "
+"Packs bought (ex: 1;2;5, 0 if none) : ",
+"Value of travelpacks bought in past : "
 };
 
 const std::vector<std::string> PACK_LABELS =
@@ -491,7 +491,12 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 		{
 			std::cout << EDIT_LABELS[3];
 			if (new_client.address.parse(std::cin))
-				break;
+				if (new_client.address.str().length() > 55)
+				{
+					utils::print("Address is too large. Please use abreviations such as 'St.' or 'Av.'");
+					continue;
+				}
+				else break;
 
 			if (new_client.address.get_error() == "EOF")
 			{

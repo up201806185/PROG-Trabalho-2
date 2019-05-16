@@ -737,7 +737,15 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 		{
 			std::cout << EDIT_LABELS[1];
 			if (new_travelpack.parse_destinations(std::cin))
-				break;
+			{
+				if (new_travelpack.get_destinations_str.length() > 55)
+				{
+					utils::print("Destinations vector is too large. Please use abreviations if possible");
+					continue;
+				}
+				else break;
+			}
+			
 			if (new_travelpack.error_message == "EOF")
 			{
 				if (want_to_exit())
@@ -1156,6 +1164,19 @@ bool Travelpack::get_available() const
 std::vector<std::string> Travelpack::get_destinations() const
 {
 	return destinations;
+}
+
+std::string Travelpack::get_destinations_str() const
+{
+	std::string result;
+
+	result = destinations.at(0) + " - ";
+	for (size_t i = 1; i < destinations.size() - 1; i++) {
+		result += destinations.at(i) + " , ";
+	}
+	result += destinations.at(destinations.size() - 1);
+	
+	return result;
 }
 
 Date Travelpack::get_begginning() const

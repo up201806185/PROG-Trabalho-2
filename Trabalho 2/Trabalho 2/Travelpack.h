@@ -51,6 +51,7 @@ public:
 	size_t						get_id() const;
 	bool						get_available() const;
 	std::vector<std::string>	get_destinations() const;
+	std::string					get_destinations_str() const;
 	Date						get_begginning() const;
 	Date						get_end() const;
 	double						get_price_per_person() const;
