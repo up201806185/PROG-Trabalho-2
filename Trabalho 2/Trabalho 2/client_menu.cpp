@@ -121,6 +121,8 @@ void show_all_recommendations()
 	
 	std::vector<std::pair<std::string, long>> top_packs = Travelpack::get_n_most_visited_vector();
 
+	if (top_packs.size() == 0) return;
+
 	utils::clear_screen();
 
 	utils::print("Clients\t\t\t\t\t\t\t\t\t\t\t    Recommendation");

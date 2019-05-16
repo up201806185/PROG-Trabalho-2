@@ -370,6 +370,7 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 
 void Travelpack::get_destination_visits_vector()
 {
+	destination_visits_vector.clear();
 	std::map<size_t, Travelpack*>::iterator i;
 
 	for (i = travelpacks.begin(); i != travelpacks.end(); i++) {

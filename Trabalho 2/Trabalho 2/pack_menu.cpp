@@ -132,13 +132,13 @@ void show_n_most_visited()
 	utils::print("Most visited places");
 
 	size_t i = 0;
-	std::vector<std::pair<std::string, long>>::reverse_iterator it;
+	std::vector<std::pair<std::string, long>>::iterator it;
 
-	for (it = places.rbegin(); it != places.rend(); it++) {
-		std::cout << "[" << i + 1 << "]: " << it->first << std::endl << std::endl;
+	for (it = places.begin(); it != places.end(); it++) {
+		std::cout << "[" << i + 1 << "]: " << it->first << ": " << it->second << std::endl << std::endl;
 		i++;
 	}
-	
+
 	std::cout << "Press enter to return:> ";
 	utils::wait_for_enter();
 }

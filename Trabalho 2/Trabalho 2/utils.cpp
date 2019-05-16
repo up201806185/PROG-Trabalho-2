@@ -192,5 +192,5 @@ size_t char_count(const std::string & input, const char delim)
 
 bool utils::sortbysec(const std::pair<std::string, long>& a, const std::pair<std::string, long>& b)
 {
-	return (a.second < b.second);
+	return (a.second > b.second);
 }

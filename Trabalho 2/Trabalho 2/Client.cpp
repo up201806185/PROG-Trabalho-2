@@ -8,22 +8,22 @@ std::set<Client*> Client::clients;
 
 const std::vector<std::string> LABELS =
 {
-"Client name                        : ",
-"NIF                                : ",
-"Number of close relatives          : ",
-"Address                            : ",
-"Travelpacks bought                 : ",
-"Total value of travelpacks bought  : "
+"Client name                         : ",
+"NIF                                 : ",
+"Number of close relatives           : ",
+"Address (Str / No / Flr / Pst / Loc): ",
+"Travelpacks bought                  : ",
+"Total value of travelpacks bought   : "
 };
 
 const std::vector<std::string> EDIT_LABELS =
 {
-"Client name                        : ",
-"NIF                                : ",
-"Number of close relatives          : ",
-"Address                            : ",
-"Packs bought(ex: 1;2;5, 0 if none) : ",
-"Total value of travelpacks bought  : "
+"Client name                         : ",
+"NIF                                 : ",
+"Number of close relatives           : ",
+"Address (Str / No / Flr / Pst / Loc):",
+"Packs bought(ex: 1;2;5, 0 if none)  : ",
+"Total value of travelpacks bought   : "
 };
 
 const std::vector<std::string> PACK_LABELS =
