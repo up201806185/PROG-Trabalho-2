@@ -322,23 +322,27 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 	else
 	{
 		date = true;
-
-		while (true)
+		while (true) 
 		{
-			std::cout << "Starting date (YYYY/MM/DD):> ";
-			if (begin.parse(std::cin))
+			while (true)
 			{
-				break;
+				std::cout << "Starting date (YYYY/MM/DD):> ";
+				if (begin.parse(std::cin))
+				{
+					break;
+				}
 			}
-		}
 
-		while (true)
-		{
-			std::cout << "Ending date (YYYY/MM/DD):> ";
-			if (end.parse(std::cin))
+			while (true)
 			{
-				break;
+				std::cout << "Ending date (YYYY/MM/DD):> ";
+				if (end.parse(std::cin))
+				{
+					break;
+				}
 			}
+			if (begin > end) utils::print("Incoherency error: The beggining date comes later than the finish date");
+			else break;
 		}
 	}
 

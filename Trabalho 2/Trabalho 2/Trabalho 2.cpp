@@ -22,6 +22,5 @@ int main()
 	main_menu(agency, agency_path);
 }
 
-/////////select travel pack needs refining on coherence checks (dates)
 ///////////////fix show all sold packs aesthetic
 //client creation details
