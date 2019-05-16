@@ -21,7 +21,7 @@ const std::vector<std::string> EDIT_LABELS =
 "Client name                         : ",
 "NIF                                 : ",
 "Number of close relatives           : ",
-"Address (Str / No / Flr / Pst / Loc):",
+"Address (Str / No / Flr / Pst / Loc): ",
 "Packs bought(ex: 1;2;5, 0 if none)  : ",
 "Total value of travelpacks bought   : "
 };
