@@ -128,6 +128,11 @@ namespace utils
 	*/
 	std::string yes_no_prompt(std::string prompt, std::string default_answer = "");
 
+
+	/**
+	Compares two pairs of <string, long> by the second member of each. 
+	Used to order the destination_visits vector in descending order of visits (higher number of visits at beginning)
+	*/
 	bool sortbysec(const std::pair<std::string, long> &a, const std::pair<std::string, long> &b);
 }
 

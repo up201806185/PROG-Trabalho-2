@@ -738,7 +738,8 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 			std::cout << EDIT_LABELS[1];
 			if (new_travelpack.parse_destinations(std::cin))
 			{
-				if (new_travelpack.get_destinations_str.length() > 55)
+
+				if (new_travelpack.get_destinations_str().length() > 55)
 				{
 					utils::print("Destinations vector is too large. Please use abreviations if possible");
 					continue;
