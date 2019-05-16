@@ -51,10 +51,9 @@ void pack_submenu(Travelpack *ptr)
 	if (ptr == nullptr) return;
 
 	while (true) {
-		Travelpack selected_pack = *ptr;
 
 		utils::clear_screen();
-		selected_pack.pprint();
+		ptr->pprint();
 
 		std::cout << "Options" << std::endl;
 		std::cout << "[1]: Edit pack" << std::endl;
@@ -78,8 +77,8 @@ void pack_submenu(Travelpack *ptr)
 		}
 
 		if (input == "0") break;
-		if (input == "1") selected_pack.edit();
-		if (input == "2") selected_pack.mark_as_unavailable();
+		if (input == "1") ptr->edit();
+		if (input == "2") ptr->mark_as_unavailable();
 
 		continue;
 	}
@@ -152,8 +151,11 @@ void show_sold_packs()
 	std::map<size_t, Travelpack*>::iterator it;
 
 	for (it = Travelpack::travelpacks.begin(); it != Travelpack::travelpacks.end(); ++it) {
+		bool FIRST_CLIENT = true;
+		
 		Travelpack temp_p = *it->second;
-		temp_p.central_pprint();
+		temp_p.pprint();
+		std::cout << "Associated Clients: [ ";
 
 		std::set<Client*>::iterator jt;
 		for (jt = Client::clients.begin(); jt != Client::clients.end(); ++jt) {
@@ -161,9 +163,13 @@ void show_sold_packs()
 			std::vector<Travelpack*> temp_c_packs = temp_c.get_packs();
 			if (std::find(temp_c_packs.begin(), temp_c_packs.end(), it->second) != temp_c_packs.end())
 			{
-				temp_c.pprint();
+				if (!FIRST_CLIENT) std::cout << " ; ";
+				std::cout << temp_c.get_name();
+				if (FIRST_CLIENT) FIRST_CLIENT = false;
 			}
 		}
+
+		std::cout << " ]\n\n";
 	}
 
 	std::cout << "\nPress enter to return:> ";

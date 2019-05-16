@@ -22,5 +22,6 @@ int main()
 	main_menu(agency, agency_path);
 }
 
+//implement max char limit on client name and street to be 55
 ///////////////fix show all sold packs aesthetic
 //client creation details

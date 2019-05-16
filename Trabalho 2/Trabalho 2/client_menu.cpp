@@ -6,10 +6,8 @@ void client_submenu(Client * ptr)
 	if (ptr == nullptr) return;
 
 	while (true) {
-		Client selected_client = *ptr;
-
 		utils::clear_screen();
-		selected_client.pprint();
+		ptr->pprint();
 
 		std::cout << "Options" << std::endl;
 		std::cout << "[1]: Edit costumer" << std::endl;
@@ -37,7 +35,7 @@ void client_submenu(Client * ptr)
 		if (input == "0") break;
 		if (input == "1")
 		{
-			selected_client.edit();
+			ptr->edit();
 		}
 		if (input == "2")
 		{
@@ -54,7 +52,7 @@ void client_submenu(Client * ptr)
 			utils::clear_screen();
 
 			std::cout << "Bought Travel Packs" << std::endl;
-			selected_client.show_travelpacks();
+			ptr->show_travelpacks();
 
 			std::cout << "Press enter to return:> ";
 			utils::wait_for_enter();
@@ -161,13 +159,15 @@ void show_all_recommendations()
 
 void make_purchase(Client* selected_client)
 {
-	Travelpack selected_pack = *Travelpack::select_pack();
-	if (!selected_pack.get_available() || !selected_pack.purchase_n_tickets(selected_client->get_f_size())) {
+	Travelpack *selected_pack = Travelpack::select_pack();
+	if (selected_pack == nullptr) return;
+
+	if (!selected_pack->get_available() || !selected_pack->purchase_n_tickets(selected_client->get_f_size())) {
 		utils::print("Pack is not available, cancelling purchase");
 	}
 	else {
-		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack.get_id()));
-		selected_client->update_total_purchased(selected_pack.get_price_per_person());
+		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack->get_id()));
+		selected_client->update_total_purchased(selected_pack->get_price_per_person());
 		utils::print("Purchase successful");
 	}
 
