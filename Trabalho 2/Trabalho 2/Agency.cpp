@@ -53,10 +53,10 @@ void Agency::load(const std::string & path)
 		if (nif == std::numeric_limits<size_t>::max())
 			utils::print("Unexpected EOF while trying to parse the NIF of the agency");
 		else
-			utils::print("Parsing error while trying to parse the NIF of the agency");	
+			utils::print("Parsing error while trying to parse the NIF of the agency");
 		exit(1);
 	}
-	
+
 	//URL
 	if (!utils::read_str(stream, url))
 	{

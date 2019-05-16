@@ -19,7 +19,6 @@ public:
 
 	void load(const std::string & path);
 	bool save(const std::string & path);
-	
 	void print(std::ostream & stream) const;
 	void pprint();
 

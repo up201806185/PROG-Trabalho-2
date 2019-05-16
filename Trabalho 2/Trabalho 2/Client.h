@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <iomanip>
+#include <iostream>
 #include "Travelpack.h"
 #include "Address.h"
 
@@ -16,18 +18,23 @@ public:
 	Client();
 	~Client();
 
-	static void load(const std::string & path);
-	static bool save(const std::string & path);
+	static void		load(const std::string & path);
+	static bool		save(const std::string & path);
 
 	static void		print_all();
 	void			print(std::ostream & stream) const;
 	void			pprint() const;
+	void			side_by_side_print(Travelpack* pack, std::ostream & stream = std::cout) const;
+	void			no_recommendation_print(std::ostream & stream = std::cout) const;
 
 	static void		new_from_console();
 	void			edit();
 	static Client*	select_client();
 	void			show_travelpacks();
 	static void		erase(Client * ptr);
+
+	void			push_new_pack(Travelpack* pack);
+	void			update_total_purchased(double new_value);
 
 	std::string              get_name() const;
 	size_t                   get_nif() const;
@@ -38,6 +45,8 @@ public:
 
 	bool valid() const;
 	std::string get_error() const;
+
+	static std::set<Client*> clients;
 
 private:
 	bool set_error(std::string error_str);
@@ -55,8 +64,6 @@ private:
 
 
 	void load_state(const Client & donor);
-
-	static std::set<Client*> clients;
 
 	std::string name;
 	size_t nif;

@@ -6,10 +6,8 @@ void client_submenu(Client * ptr)
 	if (ptr == nullptr) return;
 
 	while (true) {
-		Client selected_client = *ptr;
-
 		utils::clear_screen();
-		selected_client.pprint();
+		ptr->pprint();
 
 		std::cout << "Options" << std::endl;
 		std::cout << "[1]: Edit costumer" << std::endl;
@@ -37,7 +35,7 @@ void client_submenu(Client * ptr)
 		if (input == "0") break;
 		if (input == "1")
 		{
-			selected_client.edit();
+			ptr->edit();
 		}
 		if (input == "2")
 		{
@@ -46,30 +44,18 @@ void client_submenu(Client * ptr)
 		}
 		if (input == "3")
 		{
-			/*size_t pack_index = select_travel_pack(agency);
-			if (!agency.travel_packs[pack_index].is_available || agency.travel_packs[pack_index].sold_packs + 1 > agency.travel_packs[pack_index].total_packs)
-			{
-				std::cout << "Pack is not available, cancelling purchase" << std::endl;
-				std::cout << "Press enter to continue:> ";
-				utils::read_str(std::cin, input, true);
-				continue;
-			}
-			else
-			{
-				agency.travel_packs[pack_index].sold_packs++;
-				agency.clients[index].travel_packs_bought_ids.push_back(agency.travel_packs[pack_index].id);
-				std::cout << "Purchase successful" << std::endl;
-				std::cout << "Press enter to continue:> ";
-				utils::read_str(std::cin, input, true);
-				continue;
-			}*/
+			make_purchase(ptr);
+
 		}
 		if (input == "4")
 		{
 			utils::clear_screen();
 
 			std::cout << "Bought Travel Packs" << std::endl;
-			selected_client.show_travelpacks();
+			ptr->show_travelpacks();
+
+			std::cout << "Press enter to return:> ";
+			utils::wait_for_enter();
 		}
 
 		continue;
@@ -105,11 +91,10 @@ void client_menu()
 		if (input == "0") break;
 		if (input == "1")
 		{
+			utils::clear_screen();
 			std::cout << "All Clients" << std::endl;
 			Client::print_all();
 			std::cout << std::endl;
-			std::cout << "Press enter to return to the clients menu:> ";
-			utils::wait_for_enter();
 		}
 		if (input == "2")
 		{
@@ -121,14 +106,72 @@ void client_menu()
 		}
 		if (input == "4")
 		{
-			//////////
+			show_all_recommendations();
 		}
 
 		continue;
 	}
 }
 
-void show_all_clients()
+void show_all_recommendations()
 {
-	Client::print_all();
+	utils::clear_screen();
+	
+	std::vector<std::pair<std::string, long>> top_packs = Travelpack::get_n_most_visited_vector();
+
+	if (top_packs.size() == 0) return;
+
+	utils::clear_screen();
+
+	utils::print("Clients\t\t\t\t\t\t\t\t\t\t\t    Recommendation");
+
+	std::set<Client*>::iterator i;
+
+	for (i = Client::clients.begin(); i != Client::clients.end(); i++) {
+		Client selected_client = **i;
+
+		Travelpack* selected_pack = nullptr;
+
+		for (size_t j = 0; j < top_packs.size(); j++) {
+			std::string selected_destination = top_packs.at(j).first;
+			selected_destination = utils::uppercase(selected_destination);
+
+			std::pair <std::multimap<std::string, Travelpack*>::iterator, std::multimap<std::string, Travelpack*>::iterator> ret = Travelpack::destination_to_travelpack_map.equal_range(selected_destination);
+
+			for (auto k = ret.first; k != ret.second; k++) {
+				Travelpack* temp_p = k->second;
+				std::vector<Travelpack*> client_packs = selected_client.get_packs();
+				if (std::find(client_packs.begin(), client_packs.end(), temp_p) == client_packs.end()) {
+					selected_pack = temp_p;
+					break;
+				}
+			}
+		}
+		if (selected_pack != nullptr) selected_client.side_by_side_print(selected_pack);
+		else {
+			selected_client.no_recommendation_print();
+		}
+	}
+
+	std::cout << "Press enter to return:> ";
+	utils::wait_for_enter();
+}
+
+void make_purchase(Client* selected_client)
+{
+	Travelpack *selected_pack = Travelpack::select_pack();
+	if (selected_pack == nullptr) return;
+
+	if (!selected_pack->get_available() || !selected_pack->purchase_n_tickets(selected_client->get_f_size())) {
+		utils::print("Pack is not available, cancelling purchase");
+	}
+	else {
+		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack->get_id()));
+		selected_client->update_total_purchased(selected_pack->get_price_per_person());
+		utils::print("Purchase successful");
+	}
+
+	std::cout << "Press enter to continue:> ";
+	utils::wait_for_enter();
+	return;
 }

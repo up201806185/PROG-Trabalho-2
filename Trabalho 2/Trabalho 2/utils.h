@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <map>
+#include <algorithm>
 
 namespace utils
 {
@@ -40,6 +42,16 @@ namespace utils
 	*/
 	template<class T>
 	bool read_num(const std::string & str, T & input);
+
+	/**
+	Assigns the first integer it finds in 'str' to 'input'
+	Returns true if no error ocurred. Returns false if an error occurs. If input == the maximum possible representable datatype,
+	an EOF happened while reading the 'str'
+	Helpful tip: use this function from <limits> to get the maximum possible integer
+	std::numeric_limits<your_datatype>::max()
+	WARNING: The datatypes you can or cannot use with this function are not enforced, be careful
+	*/
+	bool read_num(const std::string & str, size_t & input);
 
 	/**
 	Waits for the Enter key to be pressed
@@ -115,6 +127,13 @@ namespace utils
 	Naturally, if this second argument (must be either "YES" or "NO") is used, the function won't indefinitely repeat
 	*/
 	std::string yes_no_prompt(std::string prompt, std::string default_answer = "");
+
+
+	/**
+	Compares two pairs of <string, long> by the second member of each. 
+	Used to order the destination_visits vector in descending order of visits (higher number of visits at beginning)
+	*/
+	bool sortbysec(const std::pair<std::string, long> &a, const std::pair<std::string, long> &b);
 }
 
 template <class T>

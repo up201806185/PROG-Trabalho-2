@@ -9,6 +9,7 @@ const std::string DELIMITER = "::::::::::";
 const std::string FANCY_DELIMITER = std::string(55, '=');
 std::map<size_t, Travelpack*> Travelpack::travelpacks;
 std::multimap<std::string, Travelpack*> Travelpack::destination_to_travelpack_map;
+std::vector< std::pair<std::string, long>> Travelpack::destination_visits_vector;
 const std::vector<std::string> LABELS = 
 {
 "ID                         : ",
@@ -90,9 +91,10 @@ void Travelpack::load(const std::string & path)
 			exit(1);
 		}
 
-		temp_tp.add_destinations_to_map();
+		
 		Travelpack * ptr = new Travelpack;
 		*ptr = temp_tp;
+		ptr->add_destinations_to_map();
 		travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
 		std::string temp;
@@ -127,11 +129,12 @@ void Travelpack::load(const std::string & path)
 		exit(1);
 	}
 
-	temp_tp.add_destinations_to_map();
 	Travelpack * ptr = new Travelpack;
 	*ptr = temp_tp;
+	ptr->add_destinations_to_map();
 	travelpacks.insert(std::pair<size_t, Travelpack *>(temp_tp.id, ptr));
 
+	stream.close();
 	return;
 }
 
@@ -146,15 +149,14 @@ bool Travelpack::save(const std::string & path)
 
 	utils::print(travelpacks.size(), stream);
 
-	for (size_t i = 0; i < travelpacks.size(); i++)
-	{
-		if (i != 0)
-		{
-			stream << DELIMITER << std::endl;
-		}
-		Travelpack * ptr;
-		ptr = travelpacks[i];
-		stream << *ptr;
+	std::map<size_t, Travelpack*>::iterator it;
+
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		if (it != travelpacks.begin())
+			utils::print(DELIMITER, stream);
+
+		Travelpack temp = *it->second;
+		stream << temp;
 	}
 
 	stream.close();
@@ -178,6 +180,11 @@ Travelpack * Travelpack::get_pointer_from_id(size_t id)
 		return travelpacks[id];
 }
 
+bool Travelpack::is_between_dates(Date start, Date end) const
+{
+	return (this->begginning >= start) && (this->end <= end);
+}
+
 void Travelpack::new_from_console()
 {
 	Travelpack new_tp;
@@ -185,9 +192,9 @@ void Travelpack::new_from_console()
 	const bool CHANGE_EVERYTHING[] = { false, false, false, false, false, false, false };
 	if (new_tp.granular_edit(CHANGE_EVERYTHING, false))
 	{
-		new_tp.add_destinations_to_map();
 		Travelpack * ptr = new Travelpack;
 		*ptr = new_tp;
+		ptr->add_destinations_to_map();
 		travelpacks.insert(std::pair<size_t, Travelpack *>(new_tp.id, ptr));
 	}
 
@@ -263,6 +270,222 @@ void Travelpack::edit()
 		return;
 
 	}
+}
+
+Travelpack * Travelpack::select_pack()
+{
+	utils::clear_screen();
+
+	std::vector <Travelpack*> refs = select_pack_vector();
+
+	utils::clear_screen();
+
+	if (refs.size() == 0) {
+		utils::print("No packs found");
+		std::cout << "Press enter to return:> ";
+		utils::wait_for_enter();
+		return nullptr;
+	}
+
+	for (size_t i = 0; i < refs.size(); i++) {
+		Travelpack temp = *refs.at(i);
+
+		std::cout << "[" << i + 1 << "]" << std::endl;
+		temp.pprint();
+		std::cout << std::endl;
+	}
+
+	std::cout << "Please choose a travel pack:>";
+	size_t choice;
+	if (!utils::read_num(std::cin, choice)) {
+
+		if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+	}
+
+	return refs.at(choice - 1);
+}
+
+std::vector<Travelpack*> Travelpack::select_pack_vector()
+{
+	bool date, destination;
+	Date begin, end;
+	std::string input, main_destination;
+	size_t packs_found = 0;
+	std::vector<Travelpack*> filtered_packs;
+
+	std::cout << "Do you wish to filter by starting and ending date?(Y/n):> ";
+	utils::read_str(std::cin, input, true);
+	if (input == "N" || input == "n")
+	{
+		date = false;
+	}
+	else
+	{
+		date = true;
+		while (true) 
+		{
+			while (true)
+			{
+				std::cout << "Starting date (YYYY/MM/DD):> ";
+				if (begin.parse(std::cin))
+				{
+					break;
+				}
+			}
+
+			while (true)
+			{
+				std::cout << "Ending date (YYYY/MM/DD):> ";
+				if (end.parse(std::cin))
+				{
+					break;
+				}
+			}
+			if (begin > end) utils::print("Incoherency error: The beggining date comes later than the finish date");
+			else break;
+		}
+	}
+
+	std::cout << "Do you wish to filter by main destination?(Y/n):> ";
+	utils::read_str(std::cin, input, true);
+	if (input == "N" || input == "n")
+	{
+		destination = false;
+	}
+	else
+	{
+		destination = true;
+
+		while (true)
+		{
+			std::cout << "Main destination:> ";
+			if (utils::read_str(std::cin, main_destination))
+			{
+				break;
+			}
+		}
+	}
+	
+	if (date && destination) return fetch_by_date_and_destination(begin, end, main_destination);
+	if (date) return fetch_by_date(begin, end);
+	if (destination) return fetch_by_destination(main_destination);
+	if (!date && !destination) return fetch_all();
+}
+
+void Travelpack::get_destination_visits_vector()
+{
+	destination_visits_vector.clear();
+	std::map<size_t, Travelpack*>::iterator i;
+
+	for (i = travelpacks.begin(); i != travelpacks.end(); i++) {
+		Travelpack temp = *i->second;
+		std::vector <std::string> dests = temp.destinations;
+		
+		for (size_t j = 0; j < dests.size(); j++) {
+			auto it = std::find_if(destination_visits_vector.begin(), destination_visits_vector.end(), [&dests, &j](const std::pair<std::string, double>& element) { return element.first == dests.at(j); });
+
+			if (it != destination_visits_vector.end()) it->second += temp.bought_tickets; //if destination is already in vector, add this packs' bought tickets
+
+			else destination_visits_vector.push_back(std::pair<std::string, long> (dests.at(j), temp.bought_tickets)); //create entry in vector for this destination
+		}
+	}
+	sort(destination_visits_vector.begin(), destination_visits_vector.end(), utils::sortbysec);
+}
+
+std::vector<std::pair<std::string, long>> Travelpack::get_n_most_visited_vector()
+{
+	get_destination_visits_vector();
+
+	std::vector<std::pair<std::string, long>> result;
+	
+	utils::print("What is the length (N) of the list? (Type 0 or CTRL + Z to exit)");
+	std::size_t input;
+	while (true)
+	{
+		if (!utils::read_num(std::cin, input))
+		{
+			if (input == std::numeric_limits<size_t>::max())
+			{
+				return {};
+			}
+			else
+				continue;
+		}
+		else
+			break;
+	}
+
+	if (input == 0) return {};
+
+	if (input > Travelpack::destination_visits_vector.size()) input = Travelpack::destination_visits_vector.size();
+
+	result = destination_visits_vector;
+	result.resize(input);
+
+	return result;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end)
+{
+	std::vector<Travelpack*> filtered_packs;
+
+	std::map<size_t, Travelpack*>::iterator it;
+
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		Travelpack temp = *it->second;
+		if (temp.is_between_dates(start, end)) filtered_packs.push_back(it->second);
+	}
+
+	return filtered_packs;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date end, const std::vector<Travelpack*>& packs)
+{
+	std::vector<Travelpack*> filtered_packs;
+
+	for (Travelpack * i : packs) {
+		Travelpack temp = *i;
+		if(temp.is_between_dates(start, end))
+			filtered_packs.push_back(i);
+	}
+		
+	return filtered_packs;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_destination(std::string dest)
+{
+	dest = utils::uppercase(dest);
+
+	std::vector<Travelpack*> filtered_packs;
+
+	std::pair <std::multimap<std::string, Travelpack*>::iterator, std::multimap<std::string, Travelpack*>::iterator> ret;
+	ret = destination_to_travelpack_map.equal_range(dest);
+
+	for (std::multimap<std::string, Travelpack*>::iterator it = ret.first; it != ret.second; it++) {
+		filtered_packs.push_back(it->second);
+	}
+
+	return filtered_packs;
+}
+
+std::vector<Travelpack*> Travelpack::fetch_by_date_and_destination(const Date start, const Date end, std::string dest)
+{
+	std::vector<Travelpack*> filtered_packs = fetch_by_destination(dest);
+	return fetch_by_date(start, end, filtered_packs);
+}
+
+std::vector<Travelpack*> Travelpack::fetch_all()
+{
+	std::vector<Travelpack*> filtered_packs;
+
+	std::map<size_t, Travelpack*>::iterator it;
+
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		Travelpack temp = *it->second;
+		filtered_packs.push_back(it->second);
+	}
+	
+	return filtered_packs;
 }
 
 void Travelpack::mark_as_unavailable()
@@ -514,7 +737,16 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 		{
 			std::cout << EDIT_LABELS[1];
 			if (new_travelpack.parse_destinations(std::cin))
-				break;
+			{
+
+				if (new_travelpack.get_destinations_str().length() > 55)
+				{
+					utils::print("Destinations vector is too large. Please use abreviations if possible");
+					continue;
+				}
+				else break;
+			}
+			
 			if (new_travelpack.error_message == "EOF")
 			{
 				if (want_to_exit())
@@ -817,6 +1049,13 @@ void Travelpack::pprint()
 	std::cout << FANCY_DELIMITER << std::endl;
 }
 
+void Travelpack::central_pprint()
+{
+	std::cout << "\t\t" << FANCY_DELIMITER << std::endl;
+	central_print(std::cout);
+	std::cout << "\t\t" << FANCY_DELIMITER << std::endl;
+}
+
 void Travelpack::load_state(const Travelpack & donor)
 {
 	id                 = donor.id;
@@ -845,24 +1084,51 @@ void Travelpack::add_destinations_to_map()
 	map_iterators.resize(0);
 	for (const std::string & i : destinations)
 	{
-		map_iterators.push_back(destination_to_travelpack_map.insert(std::pair<std::string, Travelpack*>(i, this)));
+		map_iterators.push_back(destination_to_travelpack_map.insert(std::pair<std::string, Travelpack*>(utils::uppercase(i), this)));
 	}
 	return;
+}
+
+void Travelpack::print_all()
+{
+	std::map<size_t, Travelpack*>::iterator it;
+
+	utils::print(FANCY_DELIMITER);
+	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
+		Travelpack temp = *it->second;
+		std::cout << temp;
+		utils::print(FANCY_DELIMITER);
+	}
 }
 
 void Travelpack::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("Travelpack                   is available", stream);
+		utils::print("Travelpack                 : is available", stream);
 	else
-		utils::print("Travelpack                   is not available", stream);
+		utils::print("Travelpack                 : is not available", stream);
 	stream << LABELS[1]; print_destinations(stream);
 	stream << LABELS[2] << begginning << std::endl;
 	stream << LABELS[3] << end << std::endl;
 	stream << LABELS[4] << price_per_person << std::endl;
 	stream << LABELS[5] << max_bought_tickets << std::endl;
 	stream << LABELS[6] << bought_tickets << std::endl;
+}
+
+void Travelpack::central_print(std::ostream & stream) const
+{
+	stream << "\t\t\t" << LABELS[0] << id << std::endl;
+	if (available)
+		utils::print("\t\t\tTravelpack                 : is available", stream);
+	else
+		utils::print("\t\t\tTravelpack                 : is not available", stream);
+	stream << "\t\t\t" << LABELS[1]; print_destinations(stream);
+	stream << "\t\t\t" << LABELS[2] << begginning << std::endl;
+	stream << "\t\t\t" << LABELS[3] << end << std::endl;
+	stream << "\t\t\t" << LABELS[4] << price_per_person << std::endl;
+	stream << "\t\t\t" << LABELS[5] << max_bought_tickets << std::endl;
+	stream << "\t\t\t" << LABELS[6] << bought_tickets << std::endl;
 }
 
 std::ostream & operator<<(std::ostream & stream, const Travelpack & travelpack)
@@ -899,6 +1165,19 @@ bool Travelpack::get_available() const
 std::vector<std::string> Travelpack::get_destinations() const
 {
 	return destinations;
+}
+
+std::string Travelpack::get_destinations_str() const
+{
+	std::string result;
+
+	result = destinations.at(0) + " - ";
+	for (size_t i = 1; i < destinations.size() - 1; i++) {
+		result += destinations.at(i) + " , ";
+	}
+	result += destinations.at(destinations.size() - 1);
+	
+	return result;
 }
 
 Date Travelpack::get_begginning() const
