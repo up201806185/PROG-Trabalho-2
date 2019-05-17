@@ -129,6 +129,8 @@ void show_n_most_visited()
 
 	std::vector<std::pair<std::string, long>> places = Travelpack::get_n_most_visited_vector();
 
+	if (places.size() == 0) return;
+
 	utils::clear_screen();
 
 	utils::print("Most visited places");

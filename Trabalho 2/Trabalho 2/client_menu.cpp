@@ -124,7 +124,7 @@ void show_all_recommendations()
 	utils::clear_screen();
 
 	std::cout << std::left << std::setw(92) << "Clients" << "Recommendations" << std::endl;
-	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER + std::string(28, '=') << std::endl;
+	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER << std::endl;
 
 	std::set<Client*>::iterator i;
 

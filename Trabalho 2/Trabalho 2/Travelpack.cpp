@@ -207,9 +207,9 @@ void Travelpack::edit()
 	std::cout << utils::FANCY_DELIMITER << std::endl;
 	std::cout << "[-] " << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("[1] Travelpack                   is available");
+		utils::print("[1] Travelpack                   [AVAILABLE]");
 	else
-		utils::print("[1] Travelpack                   is not available");
+		utils::print("[1] Travelpack                   [NOT AVAILABLE]");
 	std::cout << "[2] " << LABELS[1]; print_destinations(std::cout);
 	std::cout << "[3] " << LABELS[2] << begginning << std::endl;
 	std::cout << "[4] " << LABELS[3] << end << std::endl;
@@ -280,9 +280,6 @@ Travelpack * Travelpack::select_pack()
 	utils::clear_screen();
 
 	if (refs.size() == 0) {
-		utils::print("No packs found");
-		std::cout << "Press enter to return:> ";
-		utils::wait_for_enter();
 		return nullptr;
 	}
 
@@ -324,6 +321,8 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 	}
 	else
 	{
+		if (input == "EOF") return {};
+
 		date = true;
 		while (true) 
 		{
@@ -334,6 +333,11 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 				{
 					break;
 				}
+				else if (begin.get_error() == "EOF") 
+				{
+					return {};
+				}
+			
 			}
 
 			while (true)
@@ -343,6 +347,11 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 				{
 					break;
 				}
+				else if (end.get_error() == "EOF")
+				{
+					return {};
+				}
+
 			}
 			if (begin > end) utils::print("Incoherency error: The beggining date comes later than the finish date");
 			else break;
@@ -357,14 +366,20 @@ std::vector<Travelpack*> Travelpack::select_pack_vector()
 	}
 	else
 	{
+		if (input == "EOF") return {};
+
 		destination = true;
 
 		while (true)
 		{
 			std::cout << "Main destination:> ";
 			if (utils::read_str(std::cin, main_destination))
-			{
+			{	
 				break;
+			}
+			else if (main_destination == "EOF") 
+			{
+				return {};
 			}
 		}
 	}
@@ -439,6 +454,14 @@ std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date 
 		if (temp.is_between_dates(start, end)) filtered_packs.push_back(it->second);
 	}
 
+	if (filtered_packs.size() == 0)
+	{
+		utils::print("No packs found");
+		std::cout << "Press enter to return:> ";
+		utils::wait_for_enter();
+		return {};
+	}
+
 	return filtered_packs;
 }
 
@@ -451,7 +474,15 @@ std::vector<Travelpack*> Travelpack::fetch_by_date(const Date start, const Date 
 		if(temp.is_between_dates(start, end))
 			filtered_packs.push_back(i);
 	}
-		
+	
+	if (filtered_packs.size() == 0)
+	{
+		utils::print("No packs found");
+		std::cout << "Press enter to return:> ";
+		utils::wait_for_enter();
+		return {};
+	}
+
 	return filtered_packs;
 }
 
@@ -466,6 +497,14 @@ std::vector<Travelpack*> Travelpack::fetch_by_destination(std::string dest)
 
 	for (std::multimap<std::string, Travelpack*>::iterator it = ret.first; it != ret.second; it++) {
 		filtered_packs.push_back(it->second);
+	}
+
+	if (filtered_packs.size() == 0)
+	{
+		utils::print("No packs found");
+		std::cout << "Press enter to return:> ";
+		utils::wait_for_enter();
+		return {};
 	}
 
 	return filtered_packs;
@@ -1104,9 +1143,9 @@ void Travelpack::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("Travelpack                 : is available", stream);
+		utils::print("Travelpack                 : [AVAILABLE]", stream);
 	else
-		utils::print("Travelpack                 : is not available", stream);
+		utils::print("Travelpack                 : [NOT AVAILABLE]", stream);
 	stream << LABELS[1]; print_destinations(stream);
 	stream << LABELS[2] << begginning << std::endl;
 	stream << LABELS[3] << end << std::endl;
@@ -1119,9 +1158,9 @@ void Travelpack::central_print(std::ostream & stream) const
 {
 	stream << "\t\t\t" << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("\t\t\tTravelpack                 : is available", stream);
+		utils::print("\t\t\tTravelpack                 : [AVAILABLE]", stream);
 	else
-		utils::print("\t\t\tTravelpack                 : is not available", stream);
+		utils::print("\t\t\tTravelpack                 : [NOT AVAILABLE]", stream);
 	stream << "\t\t\t" << LABELS[1]; print_destinations(stream);
 	stream << "\t\t\t" << LABELS[2] << begginning << std::endl;
 	stream << "\t\t\t" << LABELS[3] << end << std::endl;

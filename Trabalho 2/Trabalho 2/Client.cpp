@@ -640,7 +640,7 @@ void Client::side_by_side_print(Travelpack* p, std::ostream & stream) const
 	stream << LABELS[3] << std::left << std::setw(55) << address << PACK_LABELS[3] << pack.get_price_per_person() << std::endl;
 	stream << LABELS[4]; print_packs_purchased(stream); stream << PACK_LABELS[4] << pack.get_max_bought_tickets() << std::endl;
 	stream << LABELS[5] << std::left << std::setw(55) << total_purchased << PACK_LABELS[5] << pack.get_bought_tickets() << std::endl;
-	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER + std::string(28, '=') << std::endl;
+	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER << std::endl;
 }
 
 void Client::no_recommendation_print(std::ostream & stream) const
@@ -651,7 +651,7 @@ void Client::no_recommendation_print(std::ostream & stream) const
 	stream << LABELS[3] << address << std::endl;
 	stream << LABELS[4]; print_packs_purchased(stream); stream << std::endl;
 	stream << LABELS[5] << total_purchased << std::endl;
-	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER + std::string(28, '=') << std::endl;
+	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER << std::endl;
 }
 
 void Client::print_all()
