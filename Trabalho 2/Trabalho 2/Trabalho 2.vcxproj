@@ -174,12 +174,10 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="agency_test.txt" />
-    <Text Include="client_test.txt" />
-    <Text Include="client_test2.txt" />
+    <Text Include="agency.txt" />
+    <Text Include="clients.txt" />
+    <Text Include="packs.txt" />
     <Text Include="README.txt" />
-    <Text Include="tp_test.txt" />
-    <Text Include="tp_test1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
