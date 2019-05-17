@@ -207,9 +207,9 @@ void Travelpack::edit()
 	std::cout << utils::FANCY_DELIMITER << std::endl;
 	std::cout << "[-] " << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("[1] Travelpack                   [AVAILABLE]");
+		utils::print("[1] Travelpack                   [ AVAILABLE ]");
 	else
-		utils::print("[1] Travelpack                   [NOT AVAILABLE]");
+		utils::print("[1] Travelpack                   [ NOT AVAILABLE ]");
 	std::cout << "[2] " << LABELS[1]; print_destinations(std::cout);
 	std::cout << "[3] " << LABELS[2] << begginning << std::endl;
 	std::cout << "[4] " << LABELS[3] << end << std::endl;
@@ -1143,9 +1143,9 @@ void Travelpack::print(std::ostream & stream) const
 {
 	stream << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("Travelpack                 : [AVAILABLE]", stream);
+		utils::print("Travelpack                 : [ AVAILABLE ]", stream);
 	else
-		utils::print("Travelpack                 : [NOT AVAILABLE]", stream);
+		utils::print("Travelpack                 : [ NOT AVAILABLE ]", stream);
 	stream << LABELS[1]; print_destinations(stream);
 	stream << LABELS[2] << begginning << std::endl;
 	stream << LABELS[3] << end << std::endl;
@@ -1158,9 +1158,9 @@ void Travelpack::central_print(std::ostream & stream) const
 {
 	stream << "\t\t\t" << LABELS[0] << id << std::endl;
 	if (available)
-		utils::print("\t\t\tTravelpack                 : [AVAILABLE]", stream);
+		utils::print("\t\t\tTravelpack                 : [ AVAILABLE ]", stream);
 	else
-		utils::print("\t\t\tTravelpack                 : [NOT AVAILABLE]", stream);
+		utils::print("\t\t\tTravelpack                 : [ NOT AVAILABLE ]", stream);
 	stream << "\t\t\t" << LABELS[1]; print_destinations(stream);
 	stream << "\t\t\t" << LABELS[2] << begginning << std::endl;
 	stream << "\t\t\t" << LABELS[3] << end << std::endl;

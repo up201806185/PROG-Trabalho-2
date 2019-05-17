@@ -142,7 +142,9 @@ void show_all_recommendations()
 			for (auto k = ret.first; k != ret.second; k++) {
 				Travelpack* temp_p = k->second;
 				std::vector<Travelpack*> client_packs = selected_client.get_packs();
-				if (std::find(client_packs.begin(), client_packs.end(), temp_p) == client_packs.end()) {
+				if (std::find(client_packs.begin(), client_packs.end(), temp_p) == client_packs.end() && temp_p->get_available() && (temp_p->get_max_bought_tickets() - temp_p->get_bought_tickets() >= selected_client.get_f_size()))
+				{
+					//pack mustn't be found in clients' bought packs, has to be available and be enough tickets for the client to buy
 					selected_pack = temp_p;
 					break;
 				}
@@ -154,17 +156,26 @@ void show_all_recommendations()
 		}
 	}
 
-	std::cout << "Press enter to return:> ";
+	std::cout << "\nPress enter to return:> ";
 	utils::wait_for_enter();
 }
 
 void make_purchase(Client* selected_client)
 {
 	Travelpack *selected_pack = Travelpack::select_pack();
+
+	std::vector<Travelpack*> client_packs = selected_client->get_packs();
+
 	if (selected_pack == nullptr) return;
 
-	if (!selected_pack->get_available() || !selected_pack->purchase_n_tickets(selected_client->get_f_size())) {
-		utils::print("Pack is not available or there aren't enough tickets left, cancelling purchase");
+	if (!selected_pack->get_available()) {
+		utils::print("Pack is not available, cancelling purchase");
+	}
+	else if (!selected_pack->purchase_n_tickets(selected_client->get_f_size())) {
+		utils::print("There aren't enough tickets left, cancelling purchase");
+	}
+	else if (std::find(client_packs.begin(), client_packs.end(), selected_pack) != client_packs.end()) {
+		utils::print("Client already bought this pack, cancelling purchase");
 	}
 	else {
 		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack->get_id()));
@@ -172,7 +183,7 @@ void make_purchase(Client* selected_client)
 		utils::print("Purchase successful");
 	}
 
-	std::cout << "Press enter to continue:> ";
+	std::cout << "\nPress enter to continue:> ";
 	utils::wait_for_enter();
 	return;
 }

@@ -1,0 +1,42 @@
+Rui Manuel
+234987156
+4
+Rua Sem Fim / 200 / 5Esq / 1200-001 / Lisboa
+3
+504
+::::::::::
+Belmiro Miguel
+111987666
+3
+Avenida dos Grilos / 100 / - / 2300-101 / Coimbra
+0
+1300
+::::::::::
+Jose Cid
+1032029875
+3
+Rua dos Pardais / 23 / - / 2456-456 / Korea
+6
+200
+::::::::::
+Manuel Pimenta
+123456543
+5
+Rua Amarela / 200 / 3DIR / 4330-122 / Peru
+1 ; 8
+400
+::::::::::
+Fernando Rocha
+1234535674
+3
+Rua Azul / 23 / - / 3456-234 / Albania
+5
+300
+::::::::::
+Maria Amelia
+123213123
+2
+Rua verde / 123 / 2 / 3212-323 / GhN
+8 ; 7
+1000
+::::::::::

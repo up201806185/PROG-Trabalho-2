@@ -94,7 +94,7 @@ void show_all_packs()
 
 	Travelpack::print_all();
 
-	std::cout << "Press enter to return:> ";
+	std::cout << "\nPress enter to return:> ";
 	utils::wait_for_enter();
 }
 
@@ -112,7 +112,7 @@ void show_profits()
 		Travelpack temp = *it->second;
 		std::cout << "Pack #" << temp.get_id() << ": ";
 		std::cout << "Sold " << temp.get_bought_tickets() << " at " << temp.get_price_per_person() << "$" << std::endl;
-		total_sales += temp.get_price_per_person();
+		total_sales += temp.get_bought_tickets();
 		total_profit += (temp.get_price_per_person()  * temp.get_bought_tickets());
 	}
 	std::cout << "\nIn total:" << std::endl;
@@ -184,10 +184,15 @@ void show_sold_packs()
 void make_purchase(Travelpack * ptr)
 {
 	Client * selected_client = Client::select_client();
+	std::vector<Travelpack*> client_packs = selected_client->get_packs();
+
 	if (selected_client == nullptr) return;
 
 	if (!ptr->purchase_n_tickets(selected_client->get_f_size())) {
-		utils::print("There aren't enough tickets available, cancelling purchase");
+		utils::print("There aren't enough tickets left, cancelling purchase");
+	}
+	else if (std::find(client_packs.begin(), client_packs.end(), ptr) != client_packs.end()) {
+		utils::print("Client already bought this pack, cancelling purchase");
 	}
 	else {
 		selected_client->push_new_pack(ptr);

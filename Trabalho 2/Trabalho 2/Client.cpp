@@ -647,7 +647,7 @@ void Client::no_recommendation_print(std::ostream & stream) const
 {
 	stream << LABELS[0] << name << std::endl;
 	stream << LABELS[1] << nif << std::endl;
-	stream << LABELS[2] << std::left << std::setw(95) << f_size << "No recommendation found" << std::endl;
+	stream << LABELS[2] << std::left << std::setw(82) << f_size << "No recommendation found" << std::endl;
 	stream << LABELS[3] << address << std::endl;
 	stream << LABELS[4]; print_packs_purchased(stream); stream << std::endl;
 	stream << LABELS[5] << total_purchased << std::endl;
