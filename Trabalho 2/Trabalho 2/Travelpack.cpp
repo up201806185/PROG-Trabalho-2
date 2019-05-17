@@ -6,7 +6,6 @@
 #include <vector>
 
 const std::string DELIMITER = "::::::::::";
-const std::string FANCY_DELIMITER = std::string(55, '=');
 std::map<size_t, Travelpack*> Travelpack::travelpacks;
 std::multimap<std::string, Travelpack*> Travelpack::destination_to_travelpack_map;
 std::vector< std::pair<std::string, long>> Travelpack::destination_visits_vector;
@@ -205,7 +204,7 @@ void Travelpack::edit()
 {
 	utils::clear_screen();
 
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	std::cout << "[-] " << LABELS[0] << id << std::endl;
 	if (available)
 		utils::print("[1] Travelpack                   is available");
@@ -217,7 +216,7 @@ void Travelpack::edit()
 	std::cout << "[5] " << LABELS[4] << price_per_person << std::endl;
 	std::cout << "[6] " << LABELS[5] << max_bought_tickets << std::endl;
 	std::cout << "[7] " << LABELS[6] << bought_tickets << std::endl;
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	std::cout << std::endl << std::endl;
 
 	while (true)
@@ -295,14 +294,18 @@ Travelpack * Travelpack::select_pack()
 		std::cout << std::endl;
 	}
 
-	std::cout << "Please choose a travel pack:>";
-	size_t choice;
-	if (!utils::read_num(std::cin, choice)) {
+	while (true) {
+		std::cout << "Please choose a travel pack:>";
+		size_t choice;
+		if (!utils::read_num(std::cin, choice)) {
 
-		if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+			if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+		}
+		else {
+			if (choice > refs.size()) continue;
+			else return refs.at(choice - 1);
+		}
 	}
-
-	return refs.at(choice - 1);
 }
 
 std::vector<Travelpack*> Travelpack::select_pack_vector()
@@ -646,6 +649,8 @@ bool Travelpack::parse(std::ifstream & stream)
 
 bool Travelpack::parse_destinations(std::istream & stream)
 {
+	destinations.clear();
+	
 	std::string temp;
 	if (!utils::read_str(stream, temp))
 	{
@@ -691,7 +696,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 	}
 
 
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 	//Travelpack ID
 	std::cout << LABELS[0] << id << std::endl;
 	new_travelpack.id = id;
@@ -738,13 +743,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 			std::cout << EDIT_LABELS[1];
 			if (new_travelpack.parse_destinations(std::cin))
 			{
-
-				if (new_travelpack.get_destinations_str().length() > 55)
-				{
-					utils::print("Destinations vector is too large. Please use abreviations if possible");
-					continue;
-				}
-				else break;
+				break;
 			}
 			
 			if (new_travelpack.error_message == "EOF")
@@ -876,7 +875,7 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 			}
 		}
 	}
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 
 	//Display "before" travelpack and "after" travelpack
 	utils::clear_screen();
@@ -1044,16 +1043,16 @@ bool Travelpack::granular_edit(const bool keep_info[], bool edit_mode)
 
 void Travelpack::pprint()
 {
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	print(std::cout);
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 }
 
 void Travelpack::central_pprint()
 {
-	std::cout << "\t\t" << FANCY_DELIMITER << std::endl;
+	std::cout << "\t\t" << utils::FANCY_DELIMITER << std::endl;
 	central_print(std::cout);
-	std::cout << "\t\t" << FANCY_DELIMITER << std::endl;
+	std::cout << "\t\t" << utils::FANCY_DELIMITER << std::endl;
 }
 
 void Travelpack::load_state(const Travelpack & donor)
@@ -1093,11 +1092,11 @@ void Travelpack::print_all()
 {
 	std::map<size_t, Travelpack*>::iterator it;
 
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 	for (it = travelpacks.begin(); it != travelpacks.end(); it++) {
 		Travelpack temp = *it->second;
 		std::cout << temp;
-		utils::print(FANCY_DELIMITER);
+		utils::print(utils::FANCY_DELIMITER);
 	}
 }
 
@@ -1170,8 +1169,10 @@ std::vector<std::string> Travelpack::get_destinations() const
 std::string Travelpack::get_destinations_str() const
 {
 	std::string result;
+	
+	if (destinations.size() > 1) result = destinations.at(0) + " - ";
+	else return destinations.at(0);
 
-	result = destinations.at(0) + " - ";
 	for (size_t i = 1; i < destinations.size() - 1; i++) {
 		result += destinations.at(i) + " , ";
 	}

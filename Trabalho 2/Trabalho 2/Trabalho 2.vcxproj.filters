@@ -81,5 +81,8 @@
     <Text Include="tp_test1.txt" />
     <Text Include="client_test2.txt" />
     <Text Include="agency_test.txt" />
+    <Text Include="README.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

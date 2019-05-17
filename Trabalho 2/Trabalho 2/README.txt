@@ -1,0 +1,1 @@
+Due to the formatting in some functions, its recommended to run the program terminal in full screen, for readability purposes.

@@ -3,7 +3,6 @@
 
 
 const std::string DELIMITER = "::::::::::";
-const std::string FANCY_DELIMITER = std::string(90, '=');
 std::set<Client*> Client::clients;
 
 const std::vector<std::string> LABELS =
@@ -13,7 +12,7 @@ const std::vector<std::string> LABELS =
 "Number of close relatives           : ",
 "Address (Str / No / Flr / Pst / Loc): ",
 "Packs bought (ex: 1;2;5, 0 if none) : ",
-"Value of travelpacks bought in past : "
+"Value of travelpacks                : "
 };
 
 const std::vector<std::string> EDIT_LABELS =
@@ -156,14 +155,14 @@ void Client::edit()
 {
 	utils::clear_screen();
 
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	std::cout << "[1]" << LABELS[0] << name << std::endl;
 	std::cout << "[2]" << LABELS[1] << nif << std::endl;
 	std::cout << "[3]" << LABELS[2] << f_size << std::endl;
 	std::cout << "[4]" << LABELS[3] << address << std::endl;
 	std::cout << "[5]" << LABELS[4]; print_packs_purchased(std::cout);
 	std::cout << "[6]" << LABELS[5] << total_purchased << std::endl;
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	std::cout << std::endl << std::endl;
 
 	while (true)
@@ -234,24 +233,29 @@ Client * Client::select_client()
 		std::cout << std::endl;
 		i++;
 	}
+	
+	while (true) {
+		std::cout << "Please choose a client:>";
+		size_t choice;
+		if (!utils::read_num(std::cin, choice)) {
 
-	std::cout << "Please choose a client:>";
-	size_t choice;
-	if (!utils::read_num(std::cin, choice)) {
-		
-		if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+			if (choice == std::numeric_limits<size_t>::max()) return nullptr;
+		}
+
+		else {
+			if (choice >= i) continue;
+			else return refs.at(choice - 1);
+		}
 	}
-
-	return refs.at(choice - 1);
 }
 
 void Client::show_travelpacks()
 {
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	for (size_t i = 0; i < travelpacks_purchased.size(); i++) {
 		Travelpack temp = *travelpacks_purchased.at(i);
 		std::cout << temp;
-		utils::print(FANCY_DELIMITER);
+		utils::print(utils::FANCY_DELIMITER);
 	}
 }
 
@@ -406,7 +410,7 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 		std::cout << std::endl << std::endl;
 	}
 
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 
 	//Client name
 	if (keep_info[0])
@@ -420,7 +424,16 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 		{
 			std::cout << EDIT_LABELS[0];
 			if (utils::read_str(std::cin, new_client.name))
-				break;
+			{
+				if (new_client.name.size() > 55)
+				{
+					utils::print("Name is too large. Please use only the first and last name");
+					continue;
+				}
+				else
+					break;
+			}
+
 			if (new_client.name == "EOF")
 			{
 				if (want_to_exit())
@@ -491,12 +504,14 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 		{
 			std::cout << EDIT_LABELS[3];
 			if (new_client.address.parse(std::cin))
+			{
 				if (new_client.address.str().length() > 55)
 				{
 					utils::print("Address is too large. Please use abreviations such as 'St.' or 'Av.'");
 					continue;
 				}
 				else break;
+			}
 
 			if (new_client.address.get_error() == "EOF")
 			{
@@ -545,8 +560,7 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 		while (true)
 		{
 			std::cout << EDIT_LABELS[5];
-			if (utils::read_num(std::cin, total_purchased)) {
-				new_client.total_purchased = total_purchased;
+			if (utils::read_num(std::cin, new_client.total_purchased)) {
 				auto new_client_packs = new_client.get_packs();
 				for (size_t i = 0; i < new_client_packs.size(); i++) {
 					new_client.total_purchased += new_client_packs.at(i)->get_price_per_person();
@@ -563,7 +577,7 @@ bool Client::granular_edit(const bool keep_info[], bool edit_mode)
 			}
 		}
 	}
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 
 	//Display "before" travelpack and "after" travelpack
 	utils::clear_screen();
@@ -612,45 +626,43 @@ void Client::print(std::ostream & stream) const
 
 void Client::pprint() const
 {
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 	print(std::cout);
-	std::cout << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << std::endl;
 }
 
 void Client::side_by_side_print(Travelpack* p, std::ostream & stream) const
 {
 	Travelpack pack = *p;
-	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
 	stream << LABELS[0] << std::left << std::setw(55) << name << PACK_LABELS[0] << pack.get_id() << std::endl;
 	stream << LABELS[1] << std::left << std::setw(55) << nif << PACK_LABELS[1]; pack.print_destinations(stream);
 	stream << LABELS[2] << std::left << std::setw(55) << f_size << PACK_LABELS[2] << pack.get_begginning() << " - " << pack.get_end() << std::endl;
 	stream << LABELS[3] << std::left << std::setw(55) << address << PACK_LABELS[3] << pack.get_price_per_person() << std::endl;
 	stream << LABELS[4]; print_packs_purchased(stream); stream << PACK_LABELS[4] << pack.get_max_bought_tickets() << std::endl;
 	stream << LABELS[5] << std::left << std::setw(55) << total_purchased << PACK_LABELS[5] << pack.get_bought_tickets() << std::endl;
-	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER + std::string(28, '=') << std::endl;
 }
 
 void Client::no_recommendation_print(std::ostream & stream) const
 {
-	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
 	stream << LABELS[0] << name << std::endl;
 	stream << LABELS[1] << nif << std::endl;
-	stream << LABELS[2] << std::left << std::setw(85) << f_size << "No recommendation found" << std::endl;
+	stream << LABELS[2] << std::left << std::setw(95) << f_size << "No recommendation found" << std::endl;
 	stream << LABELS[3] << address << std::endl;
 	stream << LABELS[4]; print_packs_purchased(stream); stream << std::endl;
 	stream << LABELS[5] << total_purchased << std::endl;
-	std::cout << FANCY_DELIMITER << "  " << FANCY_DELIMITER << std::endl;
+	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER + std::string(28, '=') << std::endl;
 }
 
 void Client::print_all()
 {
 	std::set<Client*>::iterator it;
 
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 	for (it = clients.begin(); it != clients.end(); it++) {
 		Client temp = **it;
 		std::cout << temp;
-		utils::print(FANCY_DELIMITER);
+		utils::print(utils::FANCY_DELIMITER);
 	}
 
 	std::cout << "Press enter to return:> ";

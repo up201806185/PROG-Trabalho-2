@@ -1,6 +1,5 @@
 #include "Agency.h"
 
-const std::string FANCY_DELIMITER = std::string(55, '=');
 const std::vector<std::string> LABELS =
 {
 "Agency name      : ",
@@ -130,7 +129,7 @@ void Agency::print(std::ostream & stream) const
 
 void Agency::pprint()
 {
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 	print(std::cout);
-	utils::print(FANCY_DELIMITER);
+	utils::print(utils::FANCY_DELIMITER);
 }

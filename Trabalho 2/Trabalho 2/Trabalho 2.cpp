@@ -21,5 +21,3 @@ int main()
 	agency.load(agency_path);
 	main_menu(agency, agency_path);
 }
-
-//implement max char limit on client name and street to be 55

@@ -123,7 +123,8 @@ void show_all_recommendations()
 
 	utils::clear_screen();
 
-	utils::print("Clients\t\t\t\t\t\t\t\t\t\t\t    Recommendation");
+	std::cout << std::left << std::setw(92) << "Clients" << "Recommendations" << std::endl;
+	std::cout << utils::FANCY_DELIMITER << "  " << utils::FANCY_DELIMITER + std::string(28, '=') << std::endl;
 
 	std::set<Client*>::iterator i;
 
@@ -163,7 +164,7 @@ void make_purchase(Client* selected_client)
 	if (selected_pack == nullptr) return;
 
 	if (!selected_pack->get_available() || !selected_pack->purchase_n_tickets(selected_client->get_f_size())) {
-		utils::print("Pack is not available, cancelling purchase");
+		utils::print("Pack is not available or there aren't enough tickets left, cancelling purchase");
 	}
 	else {
 		selected_client->push_new_pack(Travelpack::get_pointer_from_id(selected_pack->get_id()));

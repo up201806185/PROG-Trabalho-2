@@ -134,6 +134,11 @@ namespace utils
 	Used to order the destination_visits vector in descending order of visits (higher number of visits at beginning)
 	*/
 	bool sortbysec(const std::pair<std::string, long> &a, const std::pair<std::string, long> &b);
+
+	/**
+	Used for display purposes
+	*/
+	static std::string FANCY_DELIMITER = std::string(90, '=');
 }
 
 template <class T>

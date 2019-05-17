@@ -7,10 +7,10 @@ void main_menu(Agency agency, std::string agency_path) {
 	{
 		std::string input;
 		utils::clear_screen();
-		std::cout << "                    Agency info" << std::endl;
+		std::cout << "Agency info" << std::endl;
 		agency.pprint();
 		std::cout << std::endl;
-		std::cout << "  Main Menu" << std::endl;
+		std::cout << "Main Menu" << std::endl;
 		std::cout << "[1]: Clients" << std::endl;
 		std::cout << "[2]: Travelpacks" << std::endl;
 		std::cout << "[3]: Save" << std::endl;
@@ -111,6 +111,5 @@ void save_menu(Agency & agency, std::string agency_path)
 				}
 			}
 		}
-
 	}
 }

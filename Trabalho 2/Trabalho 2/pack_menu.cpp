@@ -58,6 +58,8 @@ void pack_submenu(Travelpack *ptr)
 		std::cout << "Options" << std::endl;
 		std::cout << "[1]: Edit pack" << std::endl;
 		std::cout << "[2]: Mark as unavailable" << std::endl;
+		if (ptr->get_available()) 
+			std::cout << "[3]: Make a purchase" << std::endl;
 		std::cout << std::endl;
 		std::cout << "Please choose an option. If you wish to exit, enter '0' or use ctrl+Z" << std::endl;
 		std::cout << ":> ";
@@ -79,6 +81,7 @@ void pack_submenu(Travelpack *ptr)
 		if (input == "0") break;
 		if (input == "1") ptr->edit();
 		if (input == "2") ptr->mark_as_unavailable();
+		if (ptr->get_available()) if (input == "3") make_purchase(ptr);
 
 		continue;
 	}
@@ -174,4 +177,23 @@ void show_sold_packs()
 
 	std::cout << "\nPress enter to return:> ";
 	utils::wait_for_enter();
+}
+
+void make_purchase(Travelpack * ptr)
+{
+	Client * selected_client = Client::select_client();
+	if (selected_client == nullptr) return;
+
+	if (!ptr->purchase_n_tickets(selected_client->get_f_size())) {
+		utils::print("There aren't enough tickets available, cancelling purchase");
+	}
+	else {
+		selected_client->push_new_pack(ptr);
+		selected_client->update_total_purchased(ptr->get_price_per_person());
+		utils::print("Purchase successful");
+	}
+
+	std::cout << "Press enter to continue:> ";
+	utils::wait_for_enter();
+	return;
 }

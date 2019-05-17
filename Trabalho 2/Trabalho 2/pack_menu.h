@@ -9,5 +9,6 @@ void show_all_packs();
 void show_profits();
 void show_n_most_visited();
 void show_sold_packs();
+void make_purchase(Travelpack* ptr);
 
 #endif
